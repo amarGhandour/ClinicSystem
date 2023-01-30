@@ -1,31 +1,30 @@
 const express = require("express");
-const mongoose = require("mongoose");
-require('dotenv').config();
+const morgan = require('morgan')
+
+require('dotenv').config({path: './config/.env'});
+const connectDB = require('./config/db');
+const errorHandler = require('./middlewares/error');
+const ErrorResponse = require("./utils/ErrorResponse");
+
+const clinicServicesRoute = require("./routes/clinicServicesRoute");
 
 const server = express();
 
 let port = process.env.PORT || 8080;
-
-mongoose.set('strictQuery', true);
-const db = mongoose.connect(process.env.DB_URL)
-    .then(() => {
-        console.log("DB Connected");
-        server.listen(port, () => {
-            console.log("I am listening........", port);
-        });
-    }).catch((err) => {
-        console.log("DB problem" + err);
+connectDB().then(res => {
+    server.listen(port, () => {
+        console.log("I am listening........", port);
     });
+}).catch(err => console.log(`error: ${err.message}`));
 
+// logger
+server.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
+// routes
+server.use("/api/v1/services", clinicServicesRoute);
 
+server.use((request, response, next) => {
+    next(new ErrorResponse("Not found", 404));
+});
 
-
-
-
-
-
-
-
-
-
+server.use(errorHandler);
