@@ -7,6 +7,7 @@ const errorHandler = require('./middlewares/error');
 const ErrorResponse = require("./utils/ErrorResponse");
 
 const clinicServicesRoute = require("./routes/clinicServicesRoute");
+const patientRoute = require("./routes/patientsRoute");
 
 const server = express();
 
@@ -22,6 +23,7 @@ server.use(morgan(':method :url :status :res[content-length] - :response-time ms
 
 // routes
 server.use("/api/v1/services", clinicServicesRoute);
+server.use("/api/v1/patients", patientRoute);
 
 server.use((request, response, next) => {
     next(new ErrorResponse("Not found", 404));
