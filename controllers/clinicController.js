@@ -119,3 +119,25 @@ exports.deleteClincServices = (req, res, next) => {
       });
     });
 };
+//*get by id
+exports.getClinicById = (req, res, next) => {
+  ClinicServices.findById(req.body.id)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    })
+    .catch((err) => {
+      next(new ErrorResponse("Clinic Services could not be found"));
+      res.status(500).json({
+        // message: "Clinic Services could not be found",
+        // error: err
+      });
+    });
+}
+
+//*delete by id
+exports.deleteClinicById = (req, res, next) => {
+
+}

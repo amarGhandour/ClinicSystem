@@ -24,4 +24,11 @@ router.post(
 router.put("/", clinicServicesController.updateClinicServices);
 
 router.delete("/", clinicServicesController.deleteClincServices);
+
+//get by id
+router.get("/:id",
+body("_id").isMongoId().withMessage("id which you want to get must be an object"),
+clinicServicesController.getClinicById);
+
+
 module.exports = router;
