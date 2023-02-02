@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require('morgan')
+const authMW = require("./middlewares/authMW")
 
 require('dotenv').config({path: './config/.env'});
 const connectDB = require('./config/db');
@@ -8,6 +9,7 @@ const ErrorResponse = require("./utils/ErrorResponse");
 
 const clinicServicesRoute = require("./routes/clinicServicesRoute");
 const patientRoute = require("./routes/patientsRoute");
+const authRoute = require("./routes/authRoute");
 
 const server = express();
 
@@ -20,8 +22,12 @@ connectDB().then(res => {
 
 // logger
 server.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+server.use(express.json());
 
 // routes
+server.use("/api/v1/auth", authRoute);
+
+server.use(authMW);
 server.use("/api/v1/services", clinicServicesRoute);
 server.use("/api/v1/patients", patientRoute);
 

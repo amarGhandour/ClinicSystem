@@ -15,6 +15,7 @@ exports.getAllPatients = (request, response, next) => {
 
 exports.addAllPatients = (request, response, next) => {
     //create object
+    console.log(request.body)
     let newPatients = new patientSchema({
         name: request.body.name,
         age: request.body.age,
