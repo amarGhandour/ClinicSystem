@@ -7,7 +7,6 @@ const connectDB = require("./config/db");
 const errorHandler = require("./middlewares/error");
 const ErrorResponse = require("./utils/ErrorResponse");
 
-const clinicServicesRoute = require("./routes/clinicServicesRoute");
 const patientRoute = require("./routes/patientsRoute");
 const authRoute = require("./routes/authRoute");
 const medicineRoute = require("./routes/medicineRoute");
@@ -34,7 +33,6 @@ server.use("/api/v1/medicines", medicineRoute);
 server.use("/api/v1/auth", authRoute);
 
 server.use(authMW);
-server.use("/api/v1/services", clinicServicesRoute);
 server.use("/api/v1/patients", patientRoute);
 
 server.use((request, response, next) => {
