@@ -1,7 +1,6 @@
 {
   "name": "project",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon app"
@@ -17,5 +16,15 @@
     "mongoose": "^6.8.4",
     "mongoose-sequence": "^5.3.1",
     "morgan": "^1.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amarGhandour/ClinicSystem.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/amarGhandour/ClinicSystem/issues"
+  },
+  "homepage": "https://github.com/amarGhandour/ClinicSystem#readme",
+  "description": ""
 }
