@@ -1,13 +1,25 @@
-const { body, query, param, validationResult } = require("express-validator");
+const {body, query, param, validationResult} = require("express-validator");
+const ErrorResponse = require("../utils/ErrorResponse");
+require('../models/patient');
+require('../models/doctor');
+require('../models/employee');
+
+const mongoose = require("mongoose");
+
+const patientSchema = mongoose.model("patients");
+const doctorSchema = mongoose.model("doctors");
+const employeeSchema = mongoose.model("employee");
+
+
 let idValidation = param("id").isInt().withMessage("id should be number ");
 let medicineValidation = [
   body("name").isString().withMessage("Medicine Name must be String"),
   body("quantity").isInt().withMessage("Quantity must be number"),
   body("expireDate")
-    .isDate()
-    .withMessage("Expire Date must be a date (year-month-day)"),
+      .isDate()
+      .withMessage("Expire Date must be a date (year-month-day)"),
   body("productionDate")
-    .isDate()
+      .isDate()
     .withMessage("Expire Date must be a date (year-month-day)"),
   body("price").isFloat().withMessage("Price must be number 0.000"),
 ];
@@ -71,19 +83,40 @@ let employeeValidationForPatch = [
 ];
 let employeeValidation = [
   body("name").isString().withMessage("Medicine Name must be String"),
-  body("mobileNumber")
-    .isMobilePhone()
-    .matches(/^(010|012|015)-\d{8}$/)
-    .withMessage("mobile number must be 012|015|010-X8"),
-  body("clinic").isInt().withMessage("ClinicID must be number"),
+  body("mobileNumber").optional()
+      .isMobilePhone()
+      .matches(/^(010|012|015)-\d{8}$/)
+      .withMessage("mobile number must be 012|015|010-X8"),
+  // body("clinic").isInt().withMessage("ClinicID must be number"),
   body("salary")
-    .isInt({ min: 3000, max: 5000 })
-    .withMessage("Salary must be number"),
-  body("username").isString().withMessage("Username must be string and unique"),
+      .isInt({min: 3000, max: 5000})
+      .withMessage("Salary must be number"),
+  body("email+ ").isString().withMessage("Username must be string and unique"),
   body("password")
-    .isStrongPassword()
-    .withMessage("Password must be Strong password"),
+      .isStrongPassword()
+      .withMessage("Password must be Strong password"),
 ];
+
+let checkEmailUnique = async function (email) {
+  let isEmailExist = null;
+  isEmailExist = await patientSchema.exists({email: email});
+
+  if (isEmailExist) {
+    throw new ErrorResponse("Email is exist", 422);
+  }
+
+  isEmailExist = await doctorSchema.exists({email: email});
+  if (isEmailExist) {
+    throw new ErrorResponse("Email is exist", 422);
+  }
+
+  isEmailExist = await employeeSchema.exists({email: email});
+  if (isEmailExist) {
+    throw new ErrorResponse("Email is exist", 422);
+  }
+
+  return isEmailExist;
+}
 
 module.exports = {
   medicineValidation,
@@ -93,4 +126,5 @@ module.exports = {
   employeeValidation,
   employeeValidationForPatch,
   idValidation,
+  checkEmailUnique
 };
