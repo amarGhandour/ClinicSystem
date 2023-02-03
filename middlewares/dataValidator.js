@@ -39,12 +39,35 @@ let clinicValidation = [
     .withMessage("Email must be email"),
   body("description").isString().withMessage("Description must be String"),
 ];
+let clinicValidationForPatch = [
+  body("name").isString().optional().withMessage("Clinic Name must be String"),
+  body("location").isArray().optional().withMessage("Location must be array"),
+  body("phone")
+    .matches(/^01[0125][0-9]{8}$/)
+    .optional()
+    .withMessage("Mobile Number must be 11 number"),
+  body("email")
+    .isEmail()
+    .matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    .optional()
+    .withMessage("Email must be email"),
+  body("description")
+    .isString()
+    .optional()
+    .withMessage("Description must be String"),
+];
 
 let serviceValidation = [
   body("name").isString().withMessage("Service Name must be String"),
   body("description").isAlpha().withMessage("Description must be Alphabet"),
 ];
-
+let serviceValidationForPatch = [
+  body("name").isString().optional().withMessage("Service Name must be String"),
+  body("description")
+    .isAlpha()
+    .optional()
+    .withMessage("Description must be Alphabet"),
+];
 let employeeValidationForPatch = [
   body("name")
     .isString()
@@ -108,5 +131,7 @@ module.exports = {
   employeeValidation,
   employeeValidationForPatch,
   DoctorValidation,
+  clinicValidationForPatch,
+  serviceValidationForPatch,
   idValidation,
 };

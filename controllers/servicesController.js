@@ -88,6 +88,7 @@ exports.deleteServiceById = (req, res, next) => {
   services
     .findByIdAndDelete(req.params.id)
     .then((result) => {
+      
       res.status(200).json({
         success: true,
         data: result,
