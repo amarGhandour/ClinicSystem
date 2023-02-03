@@ -3,7 +3,8 @@ const router = express.Router();
 const { body, query, param, validationResult } = require("express-validator");
 const {
   medicineValidation,
-  medicinceIdValidation,
+  idValidation,
+  medicineValidationForPatch,
 } = require("./../Middlewares/dataValidator");
 const validator = require("./../Middlewares/errorValidator");
 const controller = require("./../controllers/medicineController");
@@ -11,11 +12,11 @@ router
   .route("/")
   .get(controller.getAllMedicine)
   .post(medicineValidation, validator, controller.addMedicine)
-  .patch(controller.updateMedicine);
+  .patch(medicineValidationForPatch, validator, controller.updateMedicine);
 
 router
   .route("/:id")
-  .delete(medicinceIdValidation, validator, controller.deleteMedicine)
-  .get(medicinceIdValidation, validator, controller.getMedicineByID);
+  .delete(idValidation, validator, controller.deleteMedicine)
+  .get(idValidation, validator, controller.getMedicineByID);
 
 module.exports = router;

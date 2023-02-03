@@ -12,6 +12,7 @@ const authRoute = require("./routes/authRoute");
 const medicineRoute = require("./routes/medicineRoute");
 const clinicRoute = require("./routes/clinicRoute");
 const sevicesRoute = require("./routes/servicesRoute");
+const employeeRoute = require("./routes/employee");
 
 const server = express();
 
@@ -34,6 +35,7 @@ server.use(express.json());
 server.use("/api/v1/clinics", clinicRoute);
 server.use("/api/v1/services", sevicesRoute);
 server.use("/api/v1/medicines", medicineRoute);
+server.use("/api/v1/employees", employeeRoute);
 server.use("/api/v1/auth", authRoute);
 
 server.use(authMW);
