@@ -5,7 +5,7 @@ const validator = require("./../Middlewares/errorValidator")
 const {authorize} = require("../middlewares/authMW");
 const router = express.Router();
 
-router.route("/").all(authorize('admin'))
+router.route("/")
     .get(controller.getAllPatients)
     .post(
         [
@@ -14,13 +14,13 @@ router.route("/").all(authorize('admin'))
             body("password").isString().withMessage("password must be strong")
                 .isLength({min: 1, max: 20}),
             body("email").isEmail().withMessage("Invalid Email"),
-        ], validator, controller.addAllPatients)
+        ], validator, controller.addPatient)
     .patch(controller.updateAllPatients)
     .delete(controller.deletePatient);
 
 
 router.get("/:id", param("id").isInt().withMessage("id must be integer")
-    , authorize('admin'),
+    ,
     validator,
     controller.getPatientByID);
 

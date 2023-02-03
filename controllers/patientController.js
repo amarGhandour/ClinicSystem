@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 require("./../models/patient");
+const {checkEmailUnique} = require("../middlewares/dataValidator");
+const ErrorResponse = require("../utils/ErrorResponse");
 
 const patientSchema = mongoose.model("patients");
 
@@ -9,29 +11,35 @@ exports.getAllPatients = (request, response, next) => {
         .then((data) => {
             response.status(200).json(data);
         })
-        .catch(error => next(error))
-
+        .catch(error => next(error));
 }
 
-exports.addAllPatients = (request, response, next) => {
-    //create object
-    console.log(request.body)
-    let newPatients = new patientSchema({
-        name: request.body.name,
-        age: request.body.age,
-        password: request.body.password,
-        email: request.body.email,
-    })
-    // save the object in DB -> save returns a promise
-    newPatients.save()
-        .then(result => {
-            response.status(201).json(result)
-        })
-        .catch(error => next(error))
+exports.addPatient = async (request, response, next) => {
+
+    try {
+        await checkEmailUnique(request.body.email);
+
+        let newPatients = new patientSchema({
+            name: request.body.name,
+            age: request.body.age,
+            password: request.body.password,
+            email: request.body.email,
+        });
+        newPatients.save()
+            .then(result => {
+                response.status(201).json({
+                    success: true,
+                    data: result
+                });
+            })
+            .catch(error => next(new ErrorResponse(error.message)));
+    } catch (err) {
+        return next(err.message)
+    }
+
 }
 
 exports.updateAllPatients = (request, response, next) => {
-    //put domain/class datam ->  all sent in body
     patientSchema.updateOne({_id: request.body.id}, {
         $set: {
             _id: request.body.id,
