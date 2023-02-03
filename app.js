@@ -10,6 +10,8 @@ const ErrorResponse = require("./utils/ErrorResponse");
 const patientRoute = require("./routes/patientsRoute");
 const authRoute = require("./routes/authRoute");
 const medicineRoute = require("./routes/medicineRoute");
+const clinicRoute = require("./routes/clinicRoute");
+const sevicesRoute = require("./routes/servicesRoute");
 
 const server = express();
 
@@ -29,6 +31,8 @@ server.use(
 server.use(express.json());
 
 // routes
+server.use("/api/v1/clinics", clinicRoute);
+server.use("/api/v1/services", sevicesRoute);
 server.use("/api/v1/medicines", medicineRoute);
 server.use("/api/v1/auth", authRoute);
 
