@@ -16,10 +16,10 @@ let medicineValidation = [
   body("name").isString().withMessage("Medicine Name must be String"),
   body("quantity").isInt().withMessage("Quantity must be number"),
   body("expireDate")
-      .isDate()
-      .withMessage("Expire Date must be a date (year-month-day)"),
+    .isDate()
+    .withMessage("Expire Date must be a date (year-month-day)"),
   body("productionDate")
-      .isDate()
+    .isDate()
     .withMessage("Expire Date must be a date (year-month-day)"),
   body("price").isFloat().withMessage("Price must be number 0.000"),
 ];
@@ -51,12 +51,35 @@ let clinicValidation = [
     .withMessage("Email must be email"),
   body("description").isString().withMessage("Description must be String"),
 ];
+let clinicValidationForPatch = [
+  body("name").isString().optional().withMessage("Clinic Name must be String"),
+  body("location").isArray().optional().withMessage("Location must be array"),
+  body("phone")
+    .matches(/^01[0125][0-9]{8}$/)
+    .optional()
+    .withMessage("Mobile Number must be 11 number"),
+  body("email")
+    .isEmail()
+    .matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    .optional()
+    .withMessage("Email must be email"),
+  body("description")
+    .isString()
+    .optional()
+    .withMessage("Description must be String"),
+];
 
 let serviceValidation = [
   body("name").isString().withMessage("Service Name must be String"),
   body("description").isAlpha().withMessage("Description must be Alphabet"),
 ];
-
+let serviceValidationForPatch = [
+  body("name").isString().optional().withMessage("Service Name must be String"),
+  body("description")
+    .isAlpha()
+    .optional()
+    .withMessage("Description must be Alphabet"),
+];
 let employeeValidationForPatch = [
   body("name")
     .isString()
@@ -97,6 +120,21 @@ let employeeValidation = [
       .withMessage("Password must be Strong password"),
 ];
 
+let DoctorValidation = [
+  body("age")
+    .isInt({ min: 25, max: 60 })
+    .withMessage("age should be Integer between 25 and 60"),
+  body("name").isLength({ max: 30 }).withMessage("Name must be <30"),
+  body("password")
+    .isStrongPassword()
+    .withMessage("password must be strong")
+    .isLength({ min: 8, max: 20 }),
+  body("email").isEmail().withMessage("Invalid Email"),
+  body("specilization").isString().withMessage("Specilization must be string"),
+  body("clinics").isArray().withMessage("Clinics must be entered as an array"),
+  body("clinics.*").isNumeric().withMessage("Each clinic Id must be number"),
+];
+
 let checkEmailUnique = async function (email) {
   let isEmailExist = null;
   isEmailExist = await patientSchema.exists({email: email});
@@ -125,6 +163,9 @@ module.exports = {
   serviceValidation,
   employeeValidation,
   employeeValidationForPatch,
+  DoctorValidation,
+  clinicValidationForPatch,
+  serviceValidationForPatch,
   idValidation,
   checkEmailUnique
 };
