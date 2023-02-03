@@ -108,6 +108,21 @@ let employeeValidation = [
     .withMessage("Password must be Strong password"),
 ];
 
+let DoctorValidation = [
+  body("age")
+    .isInt({ min: 25, max: 60 })
+    .withMessage("age should be Integer between 25 and 60"),
+  body("name").isLength({ max: 30 }).withMessage("Name must be <30"),
+  body("password")
+    .isStrongPassword()
+    .withMessage("password must be strong")
+    .isLength({ min: 8, max: 20 }),
+  body("email").isEmail().withMessage("Invalid Email"),
+  body("specilization").isString().withMessage("Specilization must be string"),
+  body("clinics").isArray().withMessage("Clinics must be entered as an array"),
+  body("clinics.*").isNumeric().withMessage("Each clinic Id must be number"),
+];
+
 module.exports = {
   medicineValidation,
   medicineValidationForPatch,
@@ -115,6 +130,7 @@ module.exports = {
   serviceValidation,
   employeeValidation,
   employeeValidationForPatch,
+  DoctorValidation,
   clinicValidationForPatch,
   serviceValidationForPatch,
   idValidation,
