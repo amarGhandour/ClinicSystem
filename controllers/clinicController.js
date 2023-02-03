@@ -47,7 +47,6 @@ exports.getClinicServices = (req, res, next) => {
 
 exports.addClinicServices = (req, res, next) => {
   console.log(req.body);
-  if (data != null) {
     const clinicServices = new ClinicServices({
       name: req.body.name,
       location: req.body.location,
@@ -67,24 +66,26 @@ exports.addClinicServices = (req, res, next) => {
       .catch((err) => {
         next(new ErrorResponse(err.message, 500));
       });
-  } else {
-    next(new ErrorResponse("Clinic could not be found"));
-  }
 };
 
 exports.updateClinicServices = (req, res, next) => {
-  if (data != null) {
-    const clinicServices = new ClinicServices({
-      name: req.body.name,
-      location: req.body.location,
-      phone: req.body.phone,
-      email: req.body.email,
-      website: req.body.website,
-      description: req.body.description,
-      services: req.body.services,
-    });
+  
+    const clinicServices = new ClinicServices();
     clinicServices
-      .updateOne({ _id: req.params.id }, clinicServices)
+      .updateOne({ _id: req.params.id },
+        
+        {
+          $set: {
+          name: req.body.name,
+          location: req.body.location,
+          phone: req.body.phone,
+          email: req.body.email,
+          website: req.body.website,
+          description: req.body.description,
+          services: req.body.services,
+        }}
+        
+    )
       .then((result) => {
         res.status(200).json({
           success: true,
@@ -94,9 +95,7 @@ exports.updateClinicServices = (req, res, next) => {
       .catch((err) => {
         next(new ErrorResponse(err.message, 500));
       });
-  } else {
-    next(new ErrorResponse("Clinic could not be found"));
-  }
+ 
 };
 
 exports.deleteClincServices = (req, res, next) => {
