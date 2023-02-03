@@ -11,7 +11,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: [true, "Please add name."],
   },
-  specilization: { type: String, reqired: true },
+  specilization: {type: String, required: true},
   email: {
     type: String,
     match: [

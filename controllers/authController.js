@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 require('../models/patient');
+require('../models/doctor');
+require('../models/employee');
 
 const ErrorResponse = require("../utils/ErrorResponse");
 const {checkEmailUnique} = require("../middlewares/dataValidator");
 
 const patientSchema = mongoose.model("patients");
+const employeesSchema = mongoose.model("employee");
+const doctorsSchema = mongoose.model("doctors");
 
 exports.register = async (request, response, next) => {
 
@@ -35,16 +39,27 @@ exports.login = async (request, response, next) => {
             // get admin from employees
             // create a token for him with a response
         } else {
-            const patient = await patientSchema.findOne({email: request.body.email}).select('+password');
-            if (!patient) {
-                return next(new ErrorResponse('invalid credentials', 401));
+            let user = null;
+            user = await patientSchema.findOne({email: request.body.email}).select('+password');
+
+            if (!user) {
+                user = await doctorsSchema.findOne({email: request.body.email}).select('+password');
+                console.log(user)
+                if (!user) {
+                    user = await employeesSchema.findOne({email: request.body.email}).select('+password');
+                }
             }
-            let isMatch = await patient.matchPassword(request.body.password);
+            if (!user) {
+                return next(new ErrorResponse("invalid credentials", 401));
+            }
+
+            let isMatch = await user.matchPassword(request.body.password);
 
             if (!isMatch) {
                 return next(new ErrorResponse('invalid credentials', 401));
             }
-            const token = patient.getSignedJwtToken();
+
+            const token = user.getSignedJwtToken();
 
             response.status(200).json({
                 success: true,

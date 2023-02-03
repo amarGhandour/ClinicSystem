@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const schema = new mongoose.Schema(
@@ -41,4 +43,20 @@ const schema = new mongoose.Schema(
     {_id: false}
 );
 schema.plugin(AutoIncrement, {id: "employee_id_counter", inc_field: "_id"});
+
+schema.pre("save", async function (next) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+schema.methods.getSignedJwtToken = function () {
+    return jwt.sign({id: this._id, role: "employee"}, process.env.SECRET_KEY, {
+        expiresIn: process.env.JWT_EXPIRE,
+    });
+};
+
+schema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
 mongoose.model("employee", schema);
