@@ -4,12 +4,12 @@ require("./../models/clinic");
 const ErrorResponse = require("../utils/ErrorResponse");
 const EmployeeSchema = mongoose.model("employee");
 const ClinicShema = mongoose.model("clinic");
+
 exports.getAllEmployees = (request, response, next) => {
   EmployeeSchema.find()
-    .find()
     .populate([{ path: "clinic", select: "name" }])
     .then((result) => {
-      res.status(200).json({
+      response.status(200).json({
         success: true,
         data: result,
       });
@@ -75,7 +75,7 @@ exports.deleteEmployee = (request, response, next) => {
     .catch((err) => next(new ErrorResponse(err.message)));
 };
 
-exports.getMedicineByID = (request, response, next) => {
+exports.getEmployeeByID = (request, response, next) => {
   EmployeeSchema.findOne({ _id: request.params.id })
     .then((data) => {
       if (data != null) response.status(200).json(data);
