@@ -29,17 +29,20 @@ exports.addDoctor = async (request, response, next) => {
   for (let i = 0; i < addedClinics.length; i++) {
     if (!clinicsId.find((existClinic) => existClinic._id == addedClinics[i])) {
       return next(
-        new ErrorResponse("can't assign doctor to clinic dosen't exsit", 422)
+          new ErrorResponse("can't assign doctor to clinic dosen't exsit", 422)
       );
     }
   }
 
   let schedule = request.body.schedule;
-  for (let i = 0; i < schedule.length; i++) {
-    if (!request.body.clinics.includes(schedule[i].clinic)) {
-      return next(new ErrorResponse("Please enter one of Doctor Clinics"));
+  if (schedule) {
+    for (let i = 0; i < schedule.length; i++) {
+      if (!request.body.clinics.includes(schedule[i].clinic)) {
+        return next(new ErrorResponse("Please enter one of Doctor Clinics"));
+      }
     }
   }
+
 
   let newDoctor = new DoctorSchema({
     name: request.body.name,
