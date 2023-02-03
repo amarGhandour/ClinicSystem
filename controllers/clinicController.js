@@ -45,55 +45,58 @@ exports.getClinicServices = (req, res, next) => {
     });
 };
 
-
-
 exports.addClinicServices = (req, res, next) => {
   console.log(req.body);
-  const clinicServices = new ClinicServices({
-    name: req.body.name,
-    location: req.body.location,
-    phone: req.body.phone,
-    email: req.body.email,
-    description: req.body.description,
-    services: req.body.services,
-  });
-  clinicServices
-    .save()
-    .then((result) => {
-      return res.status(201).json({
-        success: true,
-        data: result,
-      });
-    })
-    .catch((err) => {
-      next(new ErrorResponse(err.message, 500));
+    const clinicServices = new ClinicServices({
+      name: req.body.name,
+      location: req.body.location,
+      phone: req.body.phone,
+      email: req.body.email,
+      description: req.body.description,
+      services: req.body.services,
     });
+    clinicServices
+      .save()
+      .then((result) => {
+        return res.status(201).json({
+          success: true,
+          data: result,
+        });
+      })
+      .catch((err) => {
+        next(new ErrorResponse(err.message, 500));
+      });
 };
-
 
 exports.updateClinicServices = (req, res, next) => {
-  const clinicServices = new ClinicServices({
-    name: req.body.name,
-    location: req.body.location,
-    phone: req.body.phone,
-    email: req.body.email,
-    website: req.body.website,
-    description: req.body.description,
-    services: req.body.services,
-  });
-  clinicServices
-    .updateOne({ _id: req.params.id }, clinicServices)
-    .then((result) => {
-      res.status(200).json({
-        success: true,
-        data: result,
+  
+    const clinicServices = new ClinicServices();
+    clinicServices
+      .updateOne({ _id: req.params.id },
+        
+        {
+          $set: {
+          name: req.body.name,
+          location: req.body.location,
+          phone: req.body.phone,
+          email: req.body.email,
+          website: req.body.website,
+          description: req.body.description,
+          services: req.body.services,
+        }}
+        
+    )
+      .then((result) => {
+        res.status(200).json({
+          success: true,
+          data: result,
+        });
+      })
+      .catch((err) => {
+        next(new ErrorResponse(err.message, 500));
       });
-    })
-    .catch((err) => {
-      next(new ErrorResponse(err.message, 500));
-    });
+ 
 };
-
 
 exports.deleteClincServices = (req, res, next) => {
   ClinicServices.deleteOne({ _id: req.body.id })
@@ -117,11 +120,7 @@ exports.getClinicById = (req, res, next) => {
       });
     })
     .catch((err) => {
-      next(new ErrorResponse("Clinic Services could not be found"));
-      res.status(500).json({
-        // message: "Clinic Services could not be found",
-        // error: err
-      });
+      next(new ErrorResponse("Clinic could not be found"));
     });
 };
 
