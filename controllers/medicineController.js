@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("./../models/medicine");
+const ErrorResponse = require("../utils/ErrorResponse");
 const MedicineSchema = mongoose.model("medicine");
 
 exports.addMedicine = (request, response, next) => {
@@ -42,7 +43,7 @@ exports.deleteMedicine = (request, response, next) => {
     .then((result) => {
       response.status(201).json({ message: "Drug has been deleted" });
     })
-    .catch((err) => next(err));
+    .catch((err) => next(new ErrorResponse(err.message)));
 };
 exports.getAllMedicine = (request, response, next) => {
   let sortBy;
@@ -84,7 +85,7 @@ exports.getMedicineByID = (request, response, next) => {
     .then((data) => {
       if (data != null) response.status(200).json(data);
       else {
-        next(new ErrorResponse("Teacher does not exist", 403));
+        next(new ErrorResponse("Drug does not exist", 403));
       }
     })
     .catch((error) => next(error));
