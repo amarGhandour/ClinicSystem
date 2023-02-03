@@ -91,7 +91,7 @@ let employeeValidation = [
   body("salary")
       .isInt({min: 3000, max: 5000})
       .withMessage("Salary must be number"),
-  body("email+ ").isString().withMessage("Username must be string and unique"),
+  body("email").isString().withMessage("Username must be string and unique"),
   body("password")
       .isStrongPassword()
       .withMessage("Password must be Strong password"),

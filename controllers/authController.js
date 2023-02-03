@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
 require('../models/patient');
+
 const ErrorResponse = require("../utils/ErrorResponse");
+const {checkEmailUnique} = require("../middlewares/dataValidator");
 
 const patientSchema = mongoose.model("patients");
 
 exports.register = async (request, response, next) => {
 
-    const Patient = new patientSchema({
-        name: request.body.name,
-        age: request.body.age,
-        password: request.body.password,
-        email: request.body.email,
-    });
-
     try {
+        await checkEmailUnique(request.body.email);
+        const Patient = new patientSchema({
+            name: request.body.name,
+            age: request.body.age,
+            password: request.body.password,
+            email: request.body.email,
+        });
         const patient = await Patient.save();
         response.status(201).json({
             success: true,
@@ -22,6 +24,7 @@ exports.register = async (request, response, next) => {
     } catch (err) {
         next(new ErrorResponse(err.message));
     }
+
 }
 
 exports.login = async (request, response, next) => {
