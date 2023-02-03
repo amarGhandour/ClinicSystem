@@ -4,6 +4,7 @@ const { body, query, param, validationResult } = require("express-validator");
 const clinicServicesController = require("../controllers/clinicController");
 const {
   clinicValidation,
+  clinicValidationForPatch,
   idValidation,
 } = require("../middlewares/dataValidator");
 const validator = require("../middlewares/errorValidator");
@@ -15,19 +16,14 @@ router.post(
   validator,
   clinicServicesController.addClinicServices
 );
-router.put("/:id", clinicServicesController.updateClinicServices);
+router.patch(
+  "/:id",
+  clinicValidationForPatch,
+  clinicServicesController.updateClinicServices
+);
 router.delete("/", clinicServicesController.deleteClincServices);
 router
-  .get(
-    "/:id",
-    idValidation,
-    validator,
-    clinicServicesController.getClinicById
-  )
-  .delete(
-    idValidation,
-    validator,
-    clinicServicesController.deleteClinicById
-  );
+  .get("/:id", idValidation, validator, clinicServicesController.getClinicById)
+  .delete(idValidation, validator, clinicServicesController.deleteClinicById);
 
 module.exports = router;
