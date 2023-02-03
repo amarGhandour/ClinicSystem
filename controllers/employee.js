@@ -70,7 +70,7 @@ exports.updateEmployee = (request, response, next) => {
 exports.deleteEmployee = (request, response, next) => {
   EmployeeSchema.deleteOne({ _id: request.params.id })
     .then((result) => {
-      response.status(201).json({ message: "Drug has been deleted" });
+      response.status(201).json({ message: "Employee has been deleted" });
     })
     .catch((err) => next(new ErrorResponse(err.message)));
 };

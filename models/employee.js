@@ -10,7 +10,7 @@ const schema = new mongoose.Schema(
       match: /^(010|012|015)-\d{8}$/,
     },
 
-    clinic: [{ type: Number, ref: "clinic" }],
+    clinic: { type: Number, ref: "clinic" },
     salary: {
       type: Number,
       required: true,
@@ -22,7 +22,7 @@ const schema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    password: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
   },
   { _id: false }
 );

@@ -4,7 +4,8 @@ const { body, query, param, validationResult } = require("express-validator");
 const validator = require("./../Middlewares/errorValidator");
 const {
   employeeValidation,
-  employeeIdValidation,
+  idValidation,
+  employeeValidationForPatch,
 } = require("./../Middlewares/dataValidator");
 const controller = require("./../controllers/employee");
 
@@ -12,11 +13,11 @@ router
   .route("/")
   .get(controller.getAllEmployees)
   .post(employeeValidation, validator, controller.addEmployee)
-  .patch(controller.updateEmployee);
+  .patch(employeeValidationForPatch, validator, controller.updateEmployee);
 
 router
   .route("/:id")
-  .delete(employeeIdValidation, validator, controller.deleteEmployee)
-  .get(employeeIdValidation, validator, controller.getEmployeeByID);
+  .delete(idValidation, validator, controller.deleteEmployee)
+  .get(idValidation, validator, controller.getEmployeeByID);
 
 module.exports = router;
