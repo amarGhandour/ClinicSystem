@@ -41,12 +41,18 @@ const schema = new mongoose.Schema({
         ref: "clinic",
       },
       timeline: {
-        day: { type: String, required: true },
-        startDay: { type: Number, min: 8, max: 24, required: true },
-        endDay: { type: Number, min: 8, max: 24, required: true },
+        day: {type: String, required: true},
+        startDay: {type: Number, min: 8, max: 24, required: true},
+        endDay: {type: Number, min: 8, max: 24, required: true},
+        maxApp: {type: Number, required: true},
+        available: {type: Boolean, default: true}
       },
     },
   ],
+  examPrice: {
+    type: Number,
+    required: [true, "Please add doctor examination price."],
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

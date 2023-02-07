@@ -14,6 +14,8 @@ const clinicRoute = require("./routes/clinicRoute");
 const sevicesRoute = require("./routes/servicesRoute");
 const employeeRoute = require("./routes/employee");
 const doctorRoute = require("./routes/doctorRoute");
+const invoiceRoute = require("./routes/invoiceRoute");
+const bookingRoute = require("./routes/bookingRoute");
 
 const server = express();
 
@@ -38,13 +40,16 @@ server.use("/api/v1/services", sevicesRoute);
 server.use("/api/v1/medicines", medicineRoute);
 server.use("/api/v1/employees", employeeRoute);
 server.use("/api/v1/doctors", doctorRoute);
+server.use("/api/v1/invoices", invoiceRoute);
 server.use("/api/v1/auth", authRoute);
 
 server.use(authMW);
+server.use("/api/v1/booking", bookingRoute);
+
 server.use("/api/v1/patients", patientRoute);
 
 server.use((request, response, next) => {
-  next(new ErrorResponse("Not found", 404));
+    next(new ErrorResponse("Not found", 404));
 });
 
 server.use(errorHandler);
