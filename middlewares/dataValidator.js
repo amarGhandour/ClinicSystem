@@ -1,15 +1,14 @@
-const {body, query, param, validationResult} = require("express-validator");
+const { body, query, param, validationResult } = require("express-validator");
 const ErrorResponse = require("../utils/ErrorResponse");
-require('../models/patient');
-require('../models/doctor');
-require('../models/employee');
+require("../models/patient");
+require("../models/doctor");
+require("../models/employee");
 
 const mongoose = require("mongoose");
 
 const patientSchema = mongoose.model("patients");
 const doctorSchema = mongoose.model("doctors");
 const employeeSchema = mongoose.model("employee");
-
 
 let idValidation = param("id").isInt().withMessage("id should be number ");
 let medicineValidation = [
@@ -106,58 +105,86 @@ let employeeValidationForPatch = [
 ];
 let employeeValidation = [
   body("name").isString().withMessage("Medicine Name must be String"),
-  body("mobileNumber").optional()
-      .isMobilePhone()
-      .matches(/^(010|012|015)-\d{8}$/)
-      .withMessage("mobile number must be 012|015|010-X8"),
+  body("mobileNumber")
+    .optional()
+    .isMobilePhone()
+    .matches(/^(010|012|015)-\d{8}$/)
+    .withMessage("mobile number must be 012|015|010-X8"),
   // body("clinic").isInt().withMessage("ClinicID must be number"),
   body("salary")
-      .isInt({min: 3000, max: 5000})
-      .withMessage("Salary must be number"),
+    .isInt({ min: 3000, max: 5000 })
+    .withMessage("Salary must be number"),
   body("email").isString().withMessage("Username must be string and unique"),
   body("password")
-      .isStrongPassword()
-      .withMessage("Password must be Strong password"),
+    .isStrongPassword()
+    .withMessage("Password must be Strong password"),
 ];
 
 let DoctorValidation = [
   body("age")
     .isInt({ min: 25, max: 60 })
-      .withMessage("age should be Integer between 25 and 60"),
-  body("name").isLength({max: 30}).withMessage("Name must be <30"),
+    .withMessage("age should be Integer between 25 and 60"),
+  body("name").isLength({ max: 30 }).withMessage("Name must be <30"),
   body("password")
-      .isStrongPassword()
-      .withMessage("password must be strong")
-      .isLength({min: 8, max: 20}),
+    .isStrongPassword()
+    .withMessage("password must be strong")
+    .isLength({ min: 8, max: 20 }),
   body("email").isEmail().withMessage("Invalid Email"),
   body("specilization").isString().withMessage("Specilization must be string"),
   body("clinics").isArray().withMessage("Clinics must be entered as an array"),
   body("clinics.*").isNumeric().withMessage("Each clinic Id must be number"),
-  body("schedule").isArray().withMessage("schedule must be entered as an array"),
+  body("schedule")
+    .isArray()
+    .withMessage("schedule must be entered as an array"),
   body("price").isNumeric().withMessage("examination price must be number"),
 ];
 
 let checkEmailUnique = async function (email) {
   let isEmailExist = null;
-  isEmailExist = await patientSchema.exists({email: email});
+  isEmailExist = await patientSchema.exists({ email: email });
 
   if (isEmailExist) {
     throw new ErrorResponse("Email is exist", 422);
   }
 
-  isEmailExist = await doctorSchema.exists({email: email});
+  isEmailExist = await doctorSchema.exists({ email: email });
   if (isEmailExist) {
     throw new ErrorResponse("Email is exist", 422);
   }
 
-  isEmailExist = await employeeSchema.exists({email: email});
+  isEmailExist = await employeeSchema.exists({ email: email });
   if (isEmailExist) {
     throw new ErrorResponse("Email is exist", 422);
   }
 
   return isEmailExist;
-}
-
+};
+let invoiceValidation = [
+  body("patientId").isInt().withMessage("patientId must be integer"),
+  body("patientId").isInt().withMessage("patientId must be integer"),
+  body("status")
+    .isIn(["incomplete", "failed", "success"])
+    .withMessage("status must be incomplete||failed||success"),
+  body("description").isString().withMessage("description must be string"),
+  body("total").isInt().withMessage("fees must be integer"),
+  body("paymentMethod")
+    .isIn(["cash", "Credit Card", "Insurance Card"])
+    .withMessage("paymentMethod must be cash|| credit Card || Insurance Card"),
+];
+let invoiceValidationForPatch = [
+  body("patientId").isInt().withMessage("patientId must be integer").optional(),
+  body("patientId").isInt().withMessage("patientId must be integer").optional(),
+  body("status")
+    .isIn(["incomplete", "failed", "success"])
+    .withMessage("status must be incomplete||failed||success")
+    .optional(),
+  body("description").isString().withMessage("description must be string"),
+  body("total").isInt().withMessage("fees must be integer").optional(),
+  body("paymentMethod")
+    .isIn(["cash", "Credit Card", "Insurance Card"])
+    .withMessage("paymentMethod must be cash|| credit Card || Insurance Card")
+    .optional(),
+];
 module.exports = {
   medicineValidation,
   medicineValidationForPatch,
@@ -169,5 +196,7 @@ module.exports = {
   clinicValidationForPatch,
   serviceValidationForPatch,
   idValidation,
-  checkEmailUnique
+  invoiceValidation,
+  invoiceValidationForPatch,
+  checkEmailUnique,
 };

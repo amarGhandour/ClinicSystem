@@ -1,22 +1,55 @@
 const mongoose = require("mongoose");
 require("./../models/invoice");
+require("./../models/doctor");
+require("./../models/patient");
 const ErrorResponse = require("../utils/ErrorResponse");
 const InvoiceSchema = mongoose.model("invoices");
+const DoctorSchema = mongoose.model("doctors");
+const PatientSchema = mongoose.model("patients");
 
 exports.getAllInvoices = (request, response, next) => {
-  InvoiceSchema.find()
+  let sortBy;
+  let fields;
+  let reqQuery = { ...request.query };
+  const removedFields = ["select", "sort", "page", "limit"];
+  removedFields.forEach((el) => delete reqQuery[el]);
+  let queryStr = JSON.stringify(reqQuery);
+  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+  if (request.query.select) {
+    fields = request.query.select.split(",").join(" ");
+  }
+  if (request.query.sort) {
+    sortBy = request.query.sort.split(",").join(" ");
+  } else {
+    sortBy = "doctorId";
+  }
+  let page = parseInt(request.query.page) || 1;
+  let limit = parseInt(request.query.limit) || 100;
+  let skip = (page - 1) * limit;
+
+  InvoiceSchema.find(JSON.parse(queryStr))
     .populate([
-      { path: "patients", select: "name" },
-      { path: "doctor", select: "name" },
+      // { path: "patients", select: "name" },
+      //{ path: "doctor", select: "name" },
     ])
+    .select(fields)
+    .sort(sortBy)
+    .limit(limit)
+    .skip(skip)
     .then((result) => {
-      response.status(200).json(result);
+      response.status(200).json({ message: "success", result });
     })
     .catch((error) => {
       next(new ErrorResponse(error.message));
     });
 };
-exports.addInvoice = (request, response, next) => {
+exports.addInvoice = async (request, response, next) => {
+  let doctor = await DoctorSchema.findById(request.body.doctorId);
+  let patient = await PatientSchema.findById(request.body.patientId);
+  console.log(doctor);
+  if (doctor == null || patient == null) {
+    return next(new ErrorResponse("Doctor or Patient not found", 404));
+  }
   let newInvoice = new InvoiceSchema({
     ...request.body,
   });
@@ -29,7 +62,14 @@ exports.addInvoice = (request, response, next) => {
       next(new ErrorResponse(error.message));
     });
 };
-exports.updateInvoice = (request, response, next) => {
+exports.updateInvoice = async (request, response, next) => {
+  let doctor = await DoctorSchema.findById(request.body.doctorId);
+  let patient = await PatientSchema.findById(request.body.patientId);
+  console.log(doctor);
+  if (doctor == null || patient == null) {
+    return next(new ErrorResponse("Doctor or Patient not found", 404));
+  }
+
   InvoiceSchema.updateOne(
     { _id: request.body._id },
     {
@@ -43,14 +83,14 @@ exports.updateInvoice = (request, response, next) => {
     }
   )
     .then((result) => {
-      response.status(200).json({ message: "medicine updated" });
+      response.status(200).json({ message: "Invoice has been updated" });
     })
     .catch((err) => next(new ErrorResponse(err.message)));
 };
 
 exports.deleteInvoice = (request, response, next) => {
   InvoiceSchema.delete({ _id: request.params.id })
-    .then((result) => {
+    .then(() => {
       response.status(201).json({ message: "Invoice has been deleted" });
     })
     .catch((err) => next(new ErrorResponse(err.message)));
@@ -64,13 +104,16 @@ exports.getInvoiceByID = (request, response, next) => {
         next(new ErrorResponse("Invoice does not exist", 403));
       }
     })
-    .catch((error) => next(error));
+    .catch((error) => next(new ErrorResponse(error.message)));
 };
 
 exports.getDoctorInvoices = (request, response, next) => {
   InvoiceSchema.find({ doctorId: request.params.id })
     .then((data) => {
-      response.status(200).json(data);
+      if (data != null) response.status(200).json(data);
+      else {
+        next(new ErrorResponse("no invoices for this doctor"));
+      }
     })
     .catch((error) => {
       next(new ErrorResponse(error.message));
