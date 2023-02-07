@@ -158,6 +158,16 @@ let checkEmailUnique = async function (email) {
   return isEmailExist;
 }
 
+
+
+let appointmentValidation = [    
+  body("clinic").isInt().withMessage("clinic must be integer"),
+  body("doctor").isInt().withMessage("doctor must be integer"),
+  body("patient").isInt().withMessage("patient must be integer"),
+  body("payment").isIn(["cash", "visa"]).withMessage("Invalid payment method"),
+
+];
+
 module.exports = {
   medicineValidation,
   medicineValidationForPatch,
@@ -169,5 +179,6 @@ module.exports = {
   clinicValidationForPatch,
   serviceValidationForPatch,
   idValidation,
+  appointmentValidation,
   checkEmailUnique
 };
