@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("./../models/invoice");
 const ErrorResponse = require("../utils/ErrorResponse");
-const InvoiceSchema = mongoose.model("invoice");
+const InvoiceSchema = mongoose.model("invoices");
 
 exports.getAllInvoices = (request, response, next) => {
   InvoiceSchema.find()

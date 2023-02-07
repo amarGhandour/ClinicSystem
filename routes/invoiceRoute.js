@@ -16,4 +16,5 @@ router
   .get(idValidation, validator, controller.getInvoiceByID);
 
 router.route("/doctorInvoices/:id").get(controller.getDoctorInvoices);
+
 module.exports = router;
