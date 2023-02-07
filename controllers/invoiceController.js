@@ -28,14 +28,14 @@ exports.getAllInvoices = (request, response, next) => {
   let skip = (page - 1) * limit;
 
   InvoiceSchema.find(JSON.parse(queryStr))
-    .populate([
-      // { path: "patients", select: "name" },
-      //{ path: "doctor", select: "name" },
-    ])
     .select(fields)
     .sort(sortBy)
     .limit(limit)
     .skip(skip)
+    .populate([
+      { path: "patients", select: "name" },
+      { path: "doctor", select: "name" },
+    ])
     .then((result) => {
       response.status(200).json({ message: "success", result });
     })

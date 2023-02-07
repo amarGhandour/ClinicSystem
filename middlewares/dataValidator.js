@@ -94,7 +94,7 @@ let employeeValidationForPatch = [
     .optional()
     .isInt({ min: 3000, max: 5000 })
     .withMessage("Salary must be number"),
-  body("username")
+  body("email")
     .isString()
     .optional()
     .withMessage("Username must be string and unique"),
@@ -102,6 +102,11 @@ let employeeValidationForPatch = [
     .isStrongPassword()
     .optional()
     .withMessage("Password must be Strong password"),
+  body("age")
+    .isInt({ min: 25, max: 60 })
+    .withMessage("age must be interger between 25:60")
+    .optional(),
+  body("activate").isBoolean().withMessage("activate takes boolean value"),
 ];
 let employeeValidation = [
   body("name").isString().withMessage("Medicine Name must be String"),
@@ -110,7 +115,7 @@ let employeeValidation = [
     .isMobilePhone()
     .matches(/^(010|012|015)-\d{8}$/)
     .withMessage("mobile number must be 012|015|010-X8"),
-  // body("clinic").isInt().withMessage("ClinicID must be number"),
+  body("clinic").isInt().withMessage("ClinicID must be number"),
   body("salary")
     .isInt({ min: 3000, max: 5000 })
     .withMessage("Salary must be number"),
@@ -118,6 +123,13 @@ let employeeValidation = [
   body("password")
     .isStrongPassword()
     .withMessage("Password must be Strong password"),
+  body("age")
+    .isInt({ min: 25, max: 60 })
+    .withMessage("age must be interger between 25:60"),
+  body("activate")
+    .isBoolean()
+    .withMessage("activate takes boolean value")
+    .optional(),
 ];
 
 let DoctorValidation = [

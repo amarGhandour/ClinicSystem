@@ -10,14 +10,19 @@ const {
 const controller = require("./../controllers/employee");
 
 router
-    .route("/")
-    .get(controller.getAllEmployees)
-    .post(validator, controller.addEmployee)
-    .patch(validator, controller.updateEmployee);
+  .route("/")
+  .get(controller.getAllEmployees)
+  .post(employeeValidation, validator, controller.addEmployee)
+  .patch(employeeValidationForPatch, validator, controller.updateEmployee);
 
 router
   .route("/:id")
   .delete(idValidation, validator, controller.deleteEmployee)
   .get(idValidation, validator, controller.getEmployeeByID);
-
+router
+  .route("/activate/:id")
+  .patch(employeeValidation, validator, controller.activateEmployee);
+router
+  .route("/deactivate/:id")
+  .patch(employeeValidation, validator, controller.deactivateEmployee);
 module.exports = router;
