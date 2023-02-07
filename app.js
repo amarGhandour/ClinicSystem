@@ -42,11 +42,12 @@ server.use("/api/v1/employees", employeeRoute);
 server.use("/api/v1/doctors", doctorRoute);
 server.use("/api/v1/appointments", appointmentRoute);
 server.use("/api/v1/prescription",prescriptionRoute);
+server.use("/api/v1/patients", patientRoute);
 server.use("/api/v1/auth", authRoute);
 
 
 server.use(authMW);
-server.use("/api/v1/patients", patientRoute);
+
 
 server.use((request, response, next) => {
   next(new ErrorResponse("Not found", 404));

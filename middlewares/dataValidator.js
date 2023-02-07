@@ -158,6 +158,35 @@ let checkEmailUnique = async function (email) {
   return isEmailExist;
 }
 
+let appointmentValidation = [    
+  body("clinic").isInt().withMessage("clinic must be integer"),
+  body("doctor").isInt().withMessage("doctor must be integer"),
+  body("patient").isInt().withMessage("patient must be integer"),
+  body("payment").isIn(["cash", "visa"]).withMessage("Invalid payment method"),
+
+];
+let PrescriptionValidation=[
+  body("createdAt").isDate().withMessage("CreatedAt is required"),
+        body("doctorId").isInt().withMessage("doctor id is required"),
+        body("patientId").isInt().withMessage("patient id is required"),
+        body("clinicId").isInt().withMessage("clinicid is required"),
+        body("drugs").isArray().withMessage("drug is array"),
+        body("drugs.*.drug").isString().withMessage("drug id is required"),
+        body("drugs.*.details").isString().withMessage("details is string")
+];
+let PrescriptionValidationForPatch=[
+  body("createdAt").isDate().withMessage("CreatedAt is required").optional(),
+  body("doctorId").isInt().withMessage("doctor id is required").optional(),
+  body("patientId").isInt().withMessage("patient id is required").optional(),
+  body("clinicId").isInt().withMessage("clinicid is required").optional(),
+  body("drugs").isArray().withMessage("drug is array").optional(),
+  body("drugs.*.drug").isString().withMessage("drug id is required").optional(),
+  body("drugs.*.details").isString().withMessage("details is string").optional()
+];
+
+
+
+
 module.exports = {
   medicineValidation,
   medicineValidationForPatch,
@@ -169,5 +198,8 @@ module.exports = {
   clinicValidationForPatch,
   serviceValidationForPatch,
   idValidation,
+  appointmentValidation,
+  PrescriptionValidation,
+  PrescriptionValidationForPatch,
   checkEmailUnique
 };

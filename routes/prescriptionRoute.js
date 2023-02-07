@@ -1,25 +1,18 @@
 const express = require("express");
 const {body, query, param} = require("express-validator");
-const validator = require("./../Middlewares/errorValidator")
+const { PrescriptionValidation,idValidation, PrescriptionValidationForPatch}= require("../middlewares/dataValidator");
+const validator = require("../middlewares/errorValidator");
 const controller = require("../Controllers/prescriptionController");
 const router = express.Router();
 
 router.route("/")
     .get(controller.getAllPrescriptionsByAdmin)
-    
-    .post([
-        body("createdAt").isDate().withMessage("CreatedAt is required"),
-        body("doctorId").isInt().withMessage("doctor id is required"),
-        body("patientId").isInt().withMessage("patient id is required"),
-        body("clinicId").isInt().withMessage("clinicid is required"),
-        body("drugs").isArray().withMessage("drug is array"),
-        body("drugs.*.drug").isInt().withMessage("drug id is required"),
-        body("drugs.*.details").isString().withMessage("details is string")
-    ],validator ,controller.addPrescriptionByDoctor)
-    .patch(controller.updatePrescriptionByDoctor);
-router.get("/:doctorId", controller.getAllPrescriptionsByDoctorId)
-router.get("/:doctorId", controller.getAllPrescriptionsByPatientId)
-router.get(":doctorId", controller.getAllPrescriptionsByClinictId)
-router.get(":id/:date", controller.getPrescriptionBydAndDate)
+    .post(PrescriptionValidation,validator ,controller.addPrescriptionByDoctor)
+    .patch(PrescriptionValidationForPatch,controller.updatePrescriptionByDoctor);
+    router
+    .get("/doctor/:doctorId", idValidation , controller.getAllPrescriptionsByDoctorId)
+    .get("/patien/:patientId", idValidation , controller.getAllPrescriptionsByPatientId)
+    .get("/clinic/:clinicId", idValidation , controller.getAllPrescriptionsByClinictId)
+    .get("/:doctorId/:createdAt",idValidation ,controller.getPrescriptionBydAndDate);
 
 module.exports = router;
