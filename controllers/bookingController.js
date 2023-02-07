@@ -26,7 +26,6 @@ exports.pay = async (request, response, next) => {
     });
 
     try {
-        console.log(request.id)
         const patient = await patientSchema.findOne({_id: request.id});
 
         if (!patient)
@@ -56,7 +55,7 @@ exports.pay = async (request, response, next) => {
                     patientId: patient._id,
                     doctorId: doctor._id,
                     status: "success",
-                    total: doctor.examPrice,
+                    total: request.body.price || doctor.examPrice,
                     paymentMethod: "Credit Card",
                     description: `${doctor.specilization} doctor examination.`,
                 });
@@ -74,7 +73,7 @@ exports.pay = async (request, response, next) => {
                     patientId: patient._id,
                     doctorId: doctor._id,
                     status: "failed",
-                    total: doctor.examPrice,
+                    total: request.body.price || doctor.examPrice,
                     paymentMethod: "Credit Card",
                     description: `${doctor.specilization} doctor examination.`,
                 });
@@ -87,4 +86,36 @@ exports.pay = async (request, response, next) => {
     } catch (e) {
         return next(new ErrorResponse(e.message));
     }
+}
+
+exports.payCash = async (request, response, next) => {
+
+    try {
+        const patient = await patientSchema.findOne({_id: request.id});
+        if (!patient)
+            return next(new ErrorResponse("patient not exist", 404));
+        const doctor = await doctorsSchema.findOne({_id: request.params.doctorId});
+        if (!doctor)
+            return next(new ErrorResponse("doctor not exist", 404));
+
+        let newInvoice = new invoiceSchema({
+            patientId: patient._id,
+            doctorId: doctor._id,
+            status: "success",
+            total: request.body.price || doctor.examPrice,
+            paymentMethod: "cash",
+            description: `${doctor.specilization} doctor examination.`,
+        });
+        newInvoice
+            .save().then((invoice) => {
+            response.status(201).json({
+                success: true,
+            });
+        })
+            .catch(err => next(err.message));
+
+    } catch (e) {
+        return next(new ErrorResponse(e.message));
+    }
+
 }
