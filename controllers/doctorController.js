@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 require("./../models/doctor");
 require("./../models/clinic");
 const ErrorResponse = require("../utils/ErrorResponse");
+const {checkEmailUnique} = require("../middlewares/dataValidator");
 const DoctorSchema = mongoose.model("doctors");
 const ClinicShema = mongoose.model("clinic");
 
@@ -20,11 +21,12 @@ exports.getAllDoctors = (request, response, next) => {
 };
 
 exports.addDoctor = async (request, response, next) => {
-  let addedClinics = request.body.clinics;
-  console.log(addedClinics);
 
-  let clinicsId = await ClinicShema.find({}, { _id: 1 });
-  console.log(clinicsId);
+  await checkEmailUnique(request.body.email).catch(err => next(err));
+
+  let addedClinics = request.body.clinics;
+
+  let clinicsId = await ClinicShema.find({}, {_id: 1});
 
   for (let i = 0; i < addedClinics.length; i++) {
     if (!clinicsId.find((existClinic) => existClinic._id == addedClinics[i])) {
@@ -43,7 +45,6 @@ exports.addDoctor = async (request, response, next) => {
     }
   }
 
-
   let newDoctor = new DoctorSchema({
     name: request.body.name,
     email: request.body.email,
@@ -52,6 +53,7 @@ exports.addDoctor = async (request, response, next) => {
     age: request.body.age,
     schedule: request.body.schedule,
     specilization: request.body.specilization,
+    examPrice: request.body.price,
   });
   newDoctor
     .save()
@@ -103,6 +105,7 @@ exports.updateDoctor = async (request, response, next) => {
         age: request.body.age,
         schedule: request.body.schedule,
         specilization: request.body.specilization,
+        examPrice: request.body.price,
       },
       $push: {
         clinics: request.body.clinics,
