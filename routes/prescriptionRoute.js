@@ -8,7 +8,7 @@ const router = express.Router();
 router.route("/")
     .get(controller.getAllPrescriptionsByAdmin)
     .post(PrescriptionValidation,validator ,controller.addPrescriptionByDoctor)
-    .patch(PrescriptionValidationForPatch,controller.updatePrescriptionByDoctor);
+    .patch(PrescriptionValidationForPatch, validator,controller.updatePrescriptionByDoctor);
     router
     .get("/doctor/:doctorId", idValidation , controller.getAllPrescriptionsByDoctorId)
     .get("/patien/:patientId", idValidation , controller.getAllPrescriptionsByPatientId)
