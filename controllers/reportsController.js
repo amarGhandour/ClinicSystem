@@ -2,7 +2,7 @@ const { mongoose } = require("mongoose");
 const InvoiceSchema = mongoose.model("invoices");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
-let fileBuffered = "";
+// let fileBuffered = "";
 const { jsPDF } = require("jspdf");
 
 const ErrorResponse = require("../utils/ErrorResponse");
@@ -23,7 +23,7 @@ exports.getAllInvoicesForReport = (req, res, next) => {
       console.log(result);
       //const invoiceName='invoice-'+Date.now()+'.pdf';
       //* PDF Kit
-      /*const doc = new PDFDocument();
+      const doc = new PDFDocument({ size: 'A4' });
       // res.setHeader("Content-Type", "application/pdf");
       // res.setHeader('Content-Disposition',
       // 'inline; filename=InvoiceReport5.pdf');
@@ -33,10 +33,11 @@ exports.getAllInvoicesForReport = (req, res, next) => {
      // doc.text('This the Invoices Report ', 100, 100).fontSize(25);
       doc.scale(0.6).translate(470, -380).path('M 250,75 L 323,301 131,161 369,161 177,301 z').fill('red', 'even-odd').restore();
     //Error : Failed to load PDF file.
-      doc.end();*/
+      doc.end();
+      
       //* JSPDF
 
-      const doc = new jsPDF({
+     /* const doc = new jsPDF({
         
         orientation: "portrait",
         unit: "in",
@@ -67,7 +68,7 @@ exports.getAllInvoicesForReport = (req, res, next) => {
       doc.setTextColor('blue');
       let data = doc.output();
       //doc.save("InvoiceReport.pdf");
-      fs.writeFileSync('../InvoiceReport.pdf', data, 'binary');
+      fs.writeFileSync('../InvoiceReport.pdf', data, 'binary');*/
 
       return res.status(200).json({ success: true, data: result });
     })
@@ -80,7 +81,7 @@ exports.getAllInvoicesForReport = (req, res, next) => {
 
   //*PDF Kit
 
-  /*const doc = new PDFDocument();
+  /*const doc = new PDFDocument({ size: 'A4' });
 
       doc.pipe(fs.createWriteStream('InvoiceReport5.pdf'));
       doc.pipe(result);
