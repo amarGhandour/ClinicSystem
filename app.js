@@ -17,7 +17,7 @@ const doctorRoute = require("./routes/doctorRoute");
 const prescriptionRoute = require("./routes/prescriptionRoute");
 const invoiceRoute = require("./routes/invoiceRoute");
 const bookingRoute = require("./routes/bookingRoute");
-
+const appointmentRoute = require("./routes/appointmentRoute");
 const server = express();
 
 let port = process.env.PORT || 8080;
@@ -44,6 +44,7 @@ server.use("/api/v1/doctors", doctorRoute);
 server.use("/api/v1/prescriptions", prescriptionRoute);
 server.use("/api/v1/patients", patientRoute);
 server.use("/api/v1/invoices", invoiceRoute);
+server.use("/api/v1/appointments", appointmentRoute);
 server.use("/api/v1/auth", authRoute);
 
 
