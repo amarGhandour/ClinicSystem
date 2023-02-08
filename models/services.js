@@ -12,6 +12,9 @@ const serviceSchema = new servicesSchema(
       type: String,
       // required: true,
     },
+    price: {
+      type: Number,
+    },
 
     clinic: [{ type: Number, ref: "clinic"}],
   },

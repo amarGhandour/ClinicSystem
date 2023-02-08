@@ -41,7 +41,10 @@ let medicineValidationForPatch = [
 ];
 let clinicValidation = [
   body("name").isString().withMessage("Clinic Name must be String"),
-  body("location").isArray().withMessage("Location must be array"),
+  body("location").isObject().withMessage("Location is Not valid"),
+  body("location.city").isString().withMessage("City must be String"),
+  body("location.street").isString().withMessage("Street must be String"),
+  body("location.buildingNumber").isInt().withMessage("Building Number must be number"),
   body("phone")
     .matches(/^01[0125][0-9]{8}$/)
     .withMessage("Mobile Number must be 11 number"),
