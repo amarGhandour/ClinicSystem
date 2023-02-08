@@ -3,7 +3,7 @@ const InvoiceSchema = mongoose.model("invoices");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 // let fileBuffered = "";
-const { jsPDF } = require("jspdf");
+//const { jsPDF } = require("jspdf");
 
 const ErrorResponse = require("../utils/ErrorResponse");
 
@@ -20,7 +20,7 @@ exports.getAllInvoicesForReport = (req, res, next) => {
     .limit(req.queryBuilder.limit)
     .skip(req.queryBuilder.skip)
     .then((result) => {
-      console.log(result);
+      //console.log(result);
       //const invoiceName='invoice-'+Date.now()+'.pdf';
       //* PDF Kit
       const doc = new PDFDocument({ size: 'A4' });
@@ -29,13 +29,24 @@ exports.getAllInvoicesForReport = (req, res, next) => {
       // 'inline; filename=InvoiceReport5.pdf');
     
       doc.pipe(fs.createWriteStream('InvoiceReport5.pdf'));
-      doc.text(`created AT,${result.createdAt}`);
-      doc.text(`ID,${result._id}`);
-      doc.text(`Status,${result.status}`);
-      doc.text(`Total,${result.total}`);
-      doc.text(`paymentMethod,${result.paymentMethod}`);
+      // result is an array of objects
+     result.forEach(result => {
 
-      doc.pipe(res);
+      doc.text(`created AT: ${result.createdAt}`);
+      doc.text(`ID: ${result._id}`);
+      doc.text(`Status: ${result.status}`);
+      doc.text(`Total: ${result.total}`);
+      doc.text(`paymentMethod: ${result.paymentMethod}`);
+     
+     });
+
+     /* doc.text(`created AT: ${result.createdAt}`);
+      doc.text(`ID: ${result._id}`);
+      doc.text(`Status: ${result.status}`);
+      doc.text(`Total: ${result.total}`);
+      doc.text(`paymentMethod: ${result.paymentMethod}`);
+      doc.fontSize(25);
+      doc.pipe(res);*/
      // doc.text('This the Invoices Report ', 100, 100).fontSize(25);
       doc.scale(0.6).translate(470, -380).path('M 250,75 L 323,301 131,161 369,161 177,301 z').fill('red', 'even-odd').restore();
     //Error : Failed to load PDF file.
