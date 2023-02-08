@@ -166,7 +166,6 @@ let appointmentValidation = [
 
 ];
 let PrescriptionValidation=[
-  body("createdAt").isDate().withMessage("CreatedAt is required"),
         body("doctorId").isInt().withMessage("doctor id is required"),
         body("patientId").isInt().withMessage("patient id is required"),
         body("clinicId").isInt().withMessage("clinicid is required"),
@@ -175,7 +174,6 @@ let PrescriptionValidation=[
         body("drugs.*.details").isString().withMessage("details is string")
 ];
 let PrescriptionValidationForPatch=[
-  body("createdAt").isDate().withMessage("CreatedAt is required").optional(),
   body("doctorId").isInt().withMessage("doctor id is required").optional(),
   body("patientId").isInt().withMessage("patient id is required").optional(),
   body("clinicId").isInt().withMessage("clinicid is required").optional(),

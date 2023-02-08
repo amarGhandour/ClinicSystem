@@ -13,7 +13,7 @@ const prescriptionschema = new mongoose.Schema({
     doctorId: { type: Number, ref: "doctors", required: true },
     patientId: { type: Number, ref: "patients", required: true },
     clinicId: { type: Number, ref: "clinic", required: true },
-    createdAt: { type: Date, required: true }
+    createdAt: {type: Date, default: Date.now()}
    
 }, { _id: false });
 
