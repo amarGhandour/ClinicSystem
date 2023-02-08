@@ -1,8 +1,7 @@
-
 // *This middleware is used to build the query string for the network request
 
 exports.queryBuilder = (req, res, next) => {
-    //build query
+  //build query
   const queryObject = { ...req.query };
   const excludedFields = ["page", "sort", "limit", "fields"];
   excludedFields.forEach((el) => delete queryObject[el]);
@@ -19,18 +18,14 @@ exports.queryBuilder = (req, res, next) => {
   let page = parseInt(req.query.page) || 1;
   let limit = parseInt(req.query.limit) || 100;
   let skip = (page - 1) * limit;
- 
-  req.queryBuilder= {
+
+  req.queryBuilder = {
     queryStr,
     sortBy,
     limitFields,
     page,
     limit,
-    skip
-  } 
-    next(); 
-}
-
-
-
-
+    skip,
+  };
+  next();
+};

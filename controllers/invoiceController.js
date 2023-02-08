@@ -59,7 +59,9 @@ exports.deleteInvoice = (request, response, next) => {
 exports.getInvoiceByID = (request, response, next) => {
   InvoiceSchema.findOne({ _id: request.params.id })
     .then((data) => {
-      if (data != null) response.status(200).json(data);
+      if (data != null)
+      //
+      response.status(200).json(data);
       else {
         next(new ErrorResponse("Invoice does not exist", 403));
       }
