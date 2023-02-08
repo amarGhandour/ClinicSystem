@@ -134,7 +134,7 @@ let DoctorValidation = [
   body("clinics").isArray().withMessage("Clinics must be entered as an array"),
   body("clinics.*").isNumeric().withMessage("Each clinic Id must be number"),
   body("schedule").isArray().withMessage("schedule must be entered as an array"),
-
+  body("price").isNumeric().withMessage("examination price must be number"),
 ];
 
 let checkEmailUnique = async function (email) {
