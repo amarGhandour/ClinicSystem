@@ -202,7 +202,7 @@ let appointmentValidation = [
   body("clinic").isInt().withMessage("clinic must be integer"),
   body("doctor").isInt().withMessage("doctor must be integer"),
   body("patient").isInt().withMessage("patient must be integer"),
-  body("payment").isIn(["cash", "visa"]).withMessage("Invalid payment method"),
+  body("payment").isIn(["cash", "card"]).withMessage("Invalid payment method"),
 
 ];
 
