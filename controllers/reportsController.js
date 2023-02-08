@@ -1,11 +1,11 @@
 const { mongoose } = require("mongoose");
+const doc = require("pdfkit");
 const InvoiceSchema = mongoose.model("invoices");
+const ErrorResponse = require("../utils/ErrorResponse");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
-// let fileBuffered = "";
-//const { jsPDF } = require("jspdf");
-
-const ErrorResponse = require("../utils/ErrorResponse");
+const path = require("path");
+//const report  =require('services/createReport.js');
 
 exports.getAllInvoicesForReport = (req, res, next) => {
   let invoiceCount = InvoiceSchema.countDocuments().then((count) => {
@@ -20,99 +20,48 @@ exports.getAllInvoicesForReport = (req, res, next) => {
     .limit(req.queryBuilder.limit)
     .skip(req.queryBuilder.skip)
     .then((result) => {
-      //console.log(result);
-      //const invoiceName='invoice-'+Date.now()+'.pdf';
-      //* PDF Kit
-      const doc = new PDFDocument({ size: 'A4' });
-      // res.setHeader("Content-Type", "application/pdf");
-      // res.setHeader('Content-Disposition',
-      // 'inline; filename=InvoiceReport5.pdf');
+      const name = 'invoice Report' + new Date().getTime() + '.pdf';
+
+      const filePath = path.join(__dirname, '..', 'files', name);
+     const doc = new PDFDocument({ size: 'A3', margin: 20 });
+      doc.pipe(fs.createWriteStream(filePath));
     
-      doc.pipe(fs.createWriteStream('InvoiceReport5.pdf'));
-      // result is an array of objects
-     result.forEach(result => {
+     // generateHeader(doc);
+      //logo 
+      doc.fontSize(16).text('CMS', 50, 50);
+      doc.fontSize(16).text('Invoice Report', 50, 50, { align: 'center' });
+// table header
+doc.fontSize(13).text("Created At", 50, 150);
+doc.fontSize(13).text("ID", 250, 150);
+doc.fontSize(13).text("Status", 350, 150);
+doc.fontSize(13).text("Total", 450, 150);
+doc.fontSize(13).text("Payment Method", 550, 150);
 
-      doc.text(`created AT: ${result.createdAt}`);
-      doc.text(`ID: ${result._id}`);
-      doc.text(`Status: ${result.status}`);
-      doc.text(`Total: ${result.total}`);
-      doc.text(`paymentMethod: ${result.paymentMethod}`);
-     
-     });
+result.forEach(function (obj, i) {
+  doc.fontSize(12).text(`${obj.createdAt.toLocaleDateString()} ${obj.createdAt.toLocaleTimeString()}`, 50, 240 + i * 32);
+  doc.fontSize(12).text(`${obj._id}`, 250, 240 + i * 32);
+  doc.fontSize(12).text(`${obj.status}`, 350, 240 + i * 32);
+  doc.fontSize(12).text(`${obj.total}`, 450, 240 + i * 32);
+  doc.fontSize(12).text(`${obj.paymentMethod}`, 550, 240 + i * 32);
 
-     /* doc.text(`created AT: ${result.createdAt}`);
-      doc.text(`ID: ${result._id}`);
-      doc.text(`Status: ${result.status}`);
-      doc.text(`Total: ${result.total}`);
-      doc.text(`paymentMethod: ${result.paymentMethod}`);
-      doc.fontSize(25);
-      doc.pipe(res);*/
-     // doc.text('This the Invoices Report ', 100, 100).fontSize(25);
-      doc.scale(0.6).translate(470, -380).path('M 250,75 L 323,301 131,161 369,161 177,301 z').fill('red', 'even-odd').restore();
-    //Error : Failed to load PDF file.
-    doc.end();
+});
+doc.moveTo(50, 170).lineTo(700, 170).stroke();
+   
+      doc.end();
+    
     return res.status(200).json({ success: true, data: result });
   })
   .catch((error) => {
     return next(new ErrorResponse(error.message));
   });
-      
-      //* JSPDF
-
-     /* const doc = new jsPDF({
-        
-        orientation: "portrait",
-        unit: "in",
-        format: [10, 10]
-      
-      });
-
-  
-       //doc.text(result, 100, 100);
-      result.forEach(function (obj, i) {
-        doc.text(
-          10,
-          5 + i * 5,
-
-          "createdAt:" +
-            obj.createdAt +
-            "ID:" +
-            obj._id +
-            "Status:" +
-            obj.status +
-            "Total:" +
-            obj.total +
-            "paymentMethod:" +
-            obj.paymentMethod
-        );
-      });
-      doc.setFontSize(25);
-      doc.setTextColor('blue');
-      let data = doc.output();
-      //doc.save("InvoiceReport.pdf");
-      fs.writeFileSync('../InvoiceReport.pdf', data, 'binary');*/
+    // function generateHeader(doc) {
+     
     
-  //console.log(result);
+    // }
 
   //*view engine >> res.render("index", { result: result });
 
-  //*PDF Kit
 
-  /*const doc = new PDFDocument({ size: 'A4' });
-
-      doc.pipe(fs.createWriteStream('InvoiceReport5.pdf'));
-      doc.pipe(result);
-     // doc.text('This the Invoices Report ', 100, 100).fontSize(25);
-      doc.scale(0.6).translate(470, -380).path('M 250,75 L 323,301 131,161 369,161 177,301 z').fill('red', 'even-odd').restore();
-      doc.end();
-      const file = `data:application/pdf;base64, ${Buffer.from(fileBuffered).toString("base64")}`;
-      res.setHeader("Content-Type", "application/pdf");
-    res.status(200).json({ success: true, data: result });
-  })
-  .catch((error) => {
-    next(new ErrorResponse(error.message));
-  });
-};*/
   //* JSPDF
   /*const doc = new jsPDF(
         {
