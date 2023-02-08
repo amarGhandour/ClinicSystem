@@ -33,6 +33,7 @@ const schema = new mongoose.Schema({
     type: Number,
     required: [true, "Please add age."],
   },
+  image:{type: String},
   schedule: [
     {
       clinic: {

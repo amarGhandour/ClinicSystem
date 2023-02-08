@@ -8,8 +8,9 @@ const {
   idValidation,
 } = require("../middlewares/dataValidator");
 const validator = require("../middlewares/errorValidator");
+const {queryBuilder} = require("../middlewares/queryBuilder");
 
-router.get("/", clinicServicesController.getClinicServices);
+router.get("/",queryBuilder,clinicServicesController.getClinicServices);
 router.post(
   "/",
   clinicValidation,

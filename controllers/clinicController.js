@@ -3,36 +3,36 @@ const ErrorResponse = require("../utils/ErrorResponse");
 
 exports.getClinicServices = (req, res, next) => {
   //build query
-  const queryObject = { ...req.query };
-  const excludedFields = ["page", "sort", "limit", "fields"];
-  excludedFields.forEach((el) => delete queryObject[el]);
-  //build the query string
-  let queryStr = JSON.stringify(queryObject);
-  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+  // const queryObject = { ...req.query };
+  // const excludedFields = ["page", "sort", "limit", "fields"];
+  // excludedFields.forEach((el) => delete queryObject[el]);
+  // //build the query string
+  // let queryStr = JSON.stringify(queryObject);
+  // queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-  let sortBy = req.query.sort
-    ? req.query.sort.split(",").join(" ")
-    : "-createdAt";
-  let limitFields = req.query.fields
-    ? req.query.fields.split(",").join(" ")
-    : "-__v";
-  let page = parseInt(req.query.page) || 1;
-  let limit = parseInt(req.query.limit) || 100;
-  let skip = (page - 1) * limit;
-  // Network request
+  // let sortBy = req.query.sort
+  //   ? req.query.sort.split(",").join(" ")
+  //   : "-createdAt";
+  // let limitFields = req.query.fields
+  //   ? req.query.fields.split(",").join(" ")
+  //   : "-__v";
+  // let page = parseInt(req.query.page) || 1;
+  // let limit = parseInt(req.query.limit) || 100;
+  // let skip = (page - 1) * limit;
+  // // Network request
   let clinicCount = ClinicServices.countDocuments().then((count) => {
     return count;
   });
-  if (skip >= clinicCount) throw new Error("This page does not exist");
+  if (req.queryBuilder.skip >= clinicCount) throw new Error("This page does not exist");
   //Execute the query
 
   //let query =
-  ClinicServices.find(JSON.parse(queryStr))
+  ClinicServices.find(JSON.parse(req.queryBuilder.queryStr))
     .populate([{ path: "services", select: "name" }])
-    .sort(sortBy)
-    .select(limitFields)
-    .limit(limit)
-    .skip(skip)
+    .sort(req.queryBuilder.sortBy)
+    .select(req.queryBuilder.limitFields)
+    .limit(req.queryBuilder.limit)
+    .skip(req.queryBuilder.skip)
 
     .then((result) => {
       res.status(200).json({

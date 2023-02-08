@@ -6,6 +6,7 @@ require("dotenv").config({ path: "./config/.env" });
 const connectDB = require("./config/db");
 const errorHandler = require("./middlewares/error");
 const ErrorResponse = require("./utils/ErrorResponse");
+const path = require("path");
 
 const patientRoute = require("./routes/patientsRoute");
 const authRoute = require("./routes/authRoute");
@@ -15,10 +16,14 @@ const sevicesRoute = require("./routes/servicesRoute");
 const employeeRoute = require("./routes/employee");
 const doctorRoute = require("./routes/doctorRoute");
 const invoiceRoute = require("./routes/invoiceRoute");
+const reportsRoute = require("./routes/reportsRoute");
 const bookingRoute = require("./routes/bookingRoute");
+//const multer = require("multer");
+
 
 const server = express();
-
+server.set('views', path.join(__dirname, 'views'));
+server.set('view engine', 'ejs');
 let port = process.env.PORT || 8080;
 connectDB()
   .then((res) => {
@@ -41,6 +46,7 @@ server.use("/api/v1/medicines", medicineRoute);
 server.use("/api/v1/employees", employeeRoute);
 server.use("/api/v1/doctors", doctorRoute);
 server.use("/api/v1/invoices", invoiceRoute);
+server.use("/api/v1/reports", reportsRoute);
 server.use("/api/v1/auth", authRoute);
 
 server.use(authMW);

@@ -33,6 +33,7 @@ const patientSchema = new Schema({
         required: [true, 'Please add age.'],
 
     },
+    image: {type: String},
     createdAt: {
         type: Date,
         default: Date.now(),
