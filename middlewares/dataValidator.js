@@ -197,9 +197,6 @@ let invoiceValidationForPatch = [
     .withMessage("paymentMethod must be cash|| credit Card || Insurance Card")
     .optional(),
 ];
-}
-
-
 
 let appointmentValidation = [
   body("clinic").isInt().withMessage("clinic must be integer"),

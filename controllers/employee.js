@@ -116,14 +116,14 @@ exports.deleteEmployee = (request, response, next) => {
 };
 
 exports.getEmployeeByID = (request, response, next) => {
-  EmployeeSchema.findOne({ _id: request.params.id })
-    .then((data) => {
-      if (data != null) response.status(200).json(data);
-      else {
-        next(new ErrorResponse("Employee does not exist", 403));
-      }
-    })
-    .catch((error) => next(error));
+  EmployeeSchema.findOne({_id: request.params.id})
+      .then((data) => {
+        if (data != null) response.status(200).json(data);
+        else {
+          next(new ErrorResponse("Employee does not exist", 403));
+        }
+      })
+      .catch((error) => next(new ErrorResponse(error.message)));
 };
 
 exports.activateEmployee = async (request, response, next) => {
@@ -139,7 +139,7 @@ exports.activateEmployee = async (request, response, next) => {
   )
     .then((result) => {
       return response.status(201).json({
-        success: result.acknowledged,
+        success: true,
       });
     })
     .catch((error) => {
@@ -159,7 +159,7 @@ exports.deactivateEmployee = async (request, response, next) => {
   )
     .then((result) => {
       return response.status(201).json({
-        success: result.acknowledged,
+        success: true,
       });
     })
     .catch((error) => {
