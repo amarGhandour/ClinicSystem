@@ -29,11 +29,22 @@ exports.getAllInvoicesForReport = (req, res, next) => {
       // 'inline; filename=InvoiceReport5.pdf');
     
       doc.pipe(fs.createWriteStream('InvoiceReport5.pdf'));
+      doc.text(`created AT,${result.createdAt}`);
+      doc.text(`ID,${result._id}`);
+      doc.text(`Status,${result.status}`);
+      doc.text(`Total,${result.total}`);
+      doc.text(`paymentMethod,${result.paymentMethod}`);
+
       doc.pipe(res);
      // doc.text('This the Invoices Report ', 100, 100).fontSize(25);
       doc.scale(0.6).translate(470, -380).path('M 250,75 L 323,301 131,161 369,161 177,301 z').fill('red', 'even-odd').restore();
     //Error : Failed to load PDF file.
-      doc.end();
+    doc.end();
+    return res.status(200).json({ success: true, data: result });
+  })
+  .catch((error) => {
+    return next(new ErrorResponse(error.message));
+  });
       
       //* JSPDF
 
@@ -69,12 +80,7 @@ exports.getAllInvoicesForReport = (req, res, next) => {
       let data = doc.output();
       //doc.save("InvoiceReport.pdf");
       fs.writeFileSync('../InvoiceReport.pdf', data, 'binary');*/
-
-      return res.status(200).json({ success: true, data: result });
-    })
-    .catch((error) => {
-      return next(new ErrorResponse(error.message));
-    });
+    
   //console.log(result);
 
   //*view engine >> res.render("index", { result: result });
