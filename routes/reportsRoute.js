@@ -9,7 +9,7 @@ router.get('/invoicesReports', queryBuilder,  reportsController.getAllInvoicesFo
 //router.get('/appointmentsReports', reportsController.getAllAppointmentForReport); 
 
 
-//router.get('/invoicesReports/:id',idValidation, reportsController.getInvoiceByIdForReport);
+router.get('/invoicesReports/:id',idValidation, reportsController.getInvoiceByIdForReport);
 //router.get('/appointmentsReports/:id',idValidation ,reportsController.getAppointmentByIdForReport);
 
 module.exports = router;
