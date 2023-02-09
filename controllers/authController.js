@@ -5,6 +5,7 @@ require('../models/employee');
 
 const ErrorResponse = require("../utils/ErrorResponse");
 const {checkEmailUnique} = require("../middlewares/dataValidator");
+const jwt = require("jsonwebtoken");
 
 const PatientSchema = mongoose.model("patients");
 const EmployeesSchema = mongoose.model("employee");
@@ -18,8 +19,9 @@ exports.register = async (request, response, next) => {
             name: request.body.name,
             age: request.body.age,
             password: request.body.password,
-            email: request.body.email,
+            email: request.body.email
         });
+
         const patient = await Patient.save();
         response.status(201).json({
             success: true,
@@ -56,12 +58,35 @@ exports.login = async (request, response, next) => {
 
             const token = user.getSignedJwtToken();
 
-            response.status(200).json({
-                success: true,
-                token: token
-            });
+        response.status(200).json({
+            success: true,
+            token: token
+        });
 
     } catch (err) {
         next(new ErrorResponse(err.message));
     }
+}
+
+
+exports.getMe = async (request, response, next) => {
+    const user = request.user;
+
+    response.status(200).json({
+        success: true,
+        data: user,
+    });
+}
+
+exports.logout = async (request, response, next) => {
+
+    // todo remove token from client side
+    let token = jwt.sign({id: this._id, role: "user"}, "INVALIDLOGOUT", {
+        expiresIn: process.env.JWT_EXPIRE,
+    });
+
+    response.status(200).json({
+        success: true,
+        token: token
+    });
 }
