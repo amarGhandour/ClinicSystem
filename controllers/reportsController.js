@@ -1,11 +1,8 @@
 const { mongoose } = require("mongoose");
-const doc = require("pdfkit");
 const InvoiceSchema = mongoose.model("invoices");
 const ErrorResponse = require("../utils/ErrorResponse");
 const reportCreation = require("../utils/reportCreation");
-const PDFDocument = require("pdfkit");
-const fs = require("fs");
-const path = require("path");
+
 
 exports.getAllInvoicesForReport = (req, res, next) => {
   let invoiceCount = InvoiceSchema.countDocuments().then((count) => {

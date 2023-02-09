@@ -53,6 +53,10 @@ let clinicValidation = [
     .matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
     .withMessage("Email must be email"),
   body("description").isString().withMessage("Description must be String"),
+  //custon validation for services
+  body("services").isArray().withMessage("Services must be array "),
+  body("services.*.name").isString().withMessage("Service Name must be String"),
+  body("services.*.price").isFloat().withMessage("Price must be number 0.000"),
 ];
 let clinicValidationForPatch = [
   body("name").isString().optional().withMessage("Clinic Name must be String"),

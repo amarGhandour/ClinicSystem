@@ -10,7 +10,7 @@ exports.getClinicServices = (req, res, next) => {
 
   //let query =
   ClinicServices.find(JSON.parse(req.queryBuilder.queryStr))
-    .populate([{ path: "services", select: "name" }])
+   // .populate([{ path: "services", select: "name" }])
     .sort(req.queryBuilder.sortBy)
     .select(req.queryBuilder.limitFields)
     .limit(req.queryBuilder.limit)
@@ -28,14 +28,23 @@ exports.getClinicServices = (req, res, next) => {
 };
 
 exports.addClinicServices = (req, res, next) => {
-  console.log(req.body);
+  //console.log(req.body.services[0].name);
+  console.log(req.body.services[0].price);
+  const services=[]
+  req.body.services.forEach((service)=>{
+    services.push({name: service.name, price: service.price})
+  })
+
   const clinicServices = new ClinicServices({
     name: req.body.name,
     location: req.body.location,
     phone: req.body.phone,
     email: req.body.email,
     description: req.body.description,
-    services: req.body.services,
+    services
+
+    //services: [{name: req.body.services[0].name, price: req.body.services[0].price}]
+    
   });
   clinicServices
     .save()
@@ -46,14 +55,25 @@ exports.addClinicServices = (req, res, next) => {
       });
     })
     .catch((err) => {
-      next(new ErrorResponse(err.message, 500));
+      next(new ErrorResponse(err.message, 500));n
     });
 };
 
-exports.updateClinicServices = (req, res, next) => {
-  const clinicServices = new ClinicServices();
-  clinicServices
-    .updateOne(
+exports.updateClinicServices = async(req, res, next) => {
+ const clinic = await ClinicServices.findById(req.params.id);
+
+   if(!clinic)
+   return  res.status(404).json({success: false, data: "Clinic not found"});
+   
+   const services = [];
+   req.body.services.forEach((service)=>{
+     services.push({name: service.name, price: service.price})
+   })
+ 
+   //services.push({name: req.body.services[0].name, price: req.body.services[0].price});
+   console.log(services);
+   ClinicServices
+    .findOneAndUpdate(
       { _id: req.params.id },
 
       {
@@ -62,9 +82,10 @@ exports.updateClinicServices = (req, res, next) => {
           location: req.body.location,
           phone: req.body.phone,
           email: req.body.email,
-          website: req.body.website,
           description: req.body.description,
-          services: req.body.services,
+          services
+         // services: [{name: req.body.services[0].name, price: req.body.services[0].price}]
+
         },
       }
     )
