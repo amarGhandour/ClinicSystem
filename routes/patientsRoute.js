@@ -33,12 +33,8 @@ router.route("/").all(authorize('admin'))
     .patch(patientValidationForPatch, validator, controller.updatePatient);
 
 
-router.get("/:id", idValidation
-    ,
-    validator,
-    authorize('admin'), controller.getPatientByID);
-
-router.delete("/:id", authorize('admin'), idValidation, validator, controller.deletePatient);
-
+router.route("/:id")
+    .get(idValidation, validator, authorize('admin'), controller.getPatientByID)
+    .delete("/:id", authorize('admin'), idValidation, validator, controller.deletePatient);
 
 module.exports = router;
