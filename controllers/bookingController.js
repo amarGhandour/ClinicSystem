@@ -90,8 +90,9 @@ exports.pay = async (request, response, next) => {
 
 exports.payCash = async (request, response, next) => {
 
-    // todo check if employee has access
-
+    if (request.role === 'employee' && request.user.activate) {
+        return next(new ErrorResponse("Not Authorized", 403));
+    }
     try {
         const patient = await PatientSchema.findOne({_id: request.body.patientId});
         if (!patient)

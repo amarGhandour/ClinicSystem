@@ -3,26 +3,22 @@ const {body, query, param} = require("express-validator");
 const controller = require("./../controllers/patientController")
 const validator = require("./../Middlewares/errorValidator")
 const {authorize} = require("../middlewares/authMW");
+const {patientValidation, patientValidationForPatch, idValidation} = require("../middlewares/dataValidator");
 const router = express.Router();
 
 router.route("/").all(authorize('admin'))
     .get(controller.getAllPatients)
     .post(
-        [
-            body("age").isInt().withMessage("age should be Integer"),
-            body("name").isLength({max: 30}).withMessage("Name must be <30"),
-            body("password").isString().withMessage("password must be strong")
-                .isLength({min: 1, max: 20}),
-            body("email").isEmail().withMessage("Invalid Email"),
-        ], validator, controller.addPatient)
-    .patch(controller.updateAllPatients)
-    .delete(controller.deletePatient);
+        patientValidation, validator, controller.addPatient)
+    .patch(patientValidationForPatch, validator, controller.updateAllPatients);
 
 
 router.get("/:id", param("id").isInt().withMessage("id must be integer")
     ,
     validator,
     authorize('admin'), controller.getPatientByID);
+
+router.delete("/:id", authorize('admin'), idValidation, validator, controller.deletePatient);
 
 
 module.exports = router;

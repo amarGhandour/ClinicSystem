@@ -16,6 +16,6 @@ router
     .route("/:id").all(authorize('admin', 'patient'))
     .delete(controller.deleteAppointment)
     .patch(controller.updateAppointment)
-    .get(authorize('employee'), controller.getAppointmentByID);
+    .get(authorize('admin', 'employee'), controller.getAppointmentByID);
 
 module.exports = router;

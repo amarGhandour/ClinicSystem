@@ -16,7 +16,7 @@ router
   .patch(medicineValidationForPatch, validator, controller.updateMedicine);
 
 router
-    .route("/:id").all(authorize('admin', 'employee'))
+    .route("/:id").all(authorize('admin'))
   .delete(idValidation, validator, controller.deleteMedicine)
   .get(idValidation, validator, controller.getMedicineByID);
 
