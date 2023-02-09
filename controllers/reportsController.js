@@ -16,15 +16,15 @@ exports.getAllInvoicesForReport = (req, res, next) => {
   if (req.queryBuilder.skip >= invoiceCount)
     throw new Error("This page does not exist");
 
-  InvoiceSchema.find()
+  InvoiceSchema.find().populate([
+    { path: "patientId", select: "name" },
+    { path: "doctorId", select: "name" },
+  ])
     .sort(req.queryBuilder.sortBy)
     .select(req.queryBuilder.limitFields)
     .limit(req.queryBuilder.limit)
     .skip(req.queryBuilder.skip)
-    .populate([
-      { path: "patientId", select: "name" },
-      { path: "doctorId", select: "name" },
-    ])
+   
     .then((result) => {
       reportCreation.createReportForAllInvoices(result);
 
@@ -36,7 +36,11 @@ exports.getAllInvoicesForReport = (req, res, next) => {
 };
 
 exports.getInvoiceByIdForReport = (req, res, next) => {
-  InvoiceSchema.findOne({ _id: req.params.id })
+  InvoiceSchema.findOne({ _id: req.params.id }) .populate([
+    { path: "patientId", select: "name" },
+    { path: "doctorId", select: "name" },
+    
+  ])
     .then((result) => {
       reportCreation.createReportForInvoiveById(result);
 
