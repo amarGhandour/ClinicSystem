@@ -77,17 +77,6 @@ let clinicValidationForPatch = [
         .withMessage("Description must be String"),
 ];
 
-let serviceValidation = [
-    body("name").isString().withMessage("Service Name must be String"),
-    body("description").isAlpha().withMessage("Description must be Alphabet"),
-];
-let serviceValidationForPatch = [
-    body("name").isString().optional().withMessage("Service Name must be String"),
-    body("description")
-        .isAlpha()
-        .optional()
-        .withMessage("Description must be Alphabet"),
-];
 let employeeValidationForPatch = [
     body("name")
         .isString()
@@ -295,12 +284,10 @@ module.exports = {
     medicineValidation,
     medicineValidationForPatch,
     clinicValidation,
-    serviceValidation,
     employeeValidation,
     employeeValidationForPatch,
     doctorValidation,
     clinicValidationForPatch,
-    serviceValidationForPatch,
     idValidation,
     appointmentValidation,
     checkEmailUnique,
