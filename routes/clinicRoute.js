@@ -9,22 +9,20 @@ const {
 } = require("../middlewares/dataValidator");
 const validator = require("../middlewares/errorValidator");
 const {queryBuilder} = require("../middlewares/queryBuilder");
+const {authorize} = require("../middlewares/authMW");
 
-router.get("/",queryBuilder,clinicServicesController.getClinicServices);
+router.get("/", authorize('admin'), queryBuilder, clinicServicesController.getClinicServices);
 router.post(
-  "/",
-  clinicValidation,
-  validator,
-  clinicServicesController.addClinicServices
+    "/", authorize('admin'), clinicValidation, validator, clinicServicesController.addClinicServices
 );
-router.patch(
-  "/:id",
-  clinicValidationForPatch,
-  clinicServicesController.updateClinicServices
+
+router.patch("/:id", authorize('admin'), clinicValidationForPatch, clinicServicesController.updateClinicServices
 );
-router.delete("/", clinicServicesController.deleteClincServices);
-router
-  .get("/:id", idValidation, validator, clinicServicesController.getClinicById)
-  .delete(idValidation, validator, clinicServicesController.deleteClinicById);
+
+router.delete("/", authorize('admin'), clinicServicesController.deleteClincServices);
+
+router.route('/:id').all(authorize('admin'))
+    .get(idValidation, validator, clinicServicesController.getClinicById)
+    .delete(idValidation, validator, clinicServicesController.deleteClinicById);
 
 module.exports = router;

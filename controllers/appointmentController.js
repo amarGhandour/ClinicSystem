@@ -212,10 +212,11 @@ exports.getAppointmentByID = async (request, response, next) => {
     if (request.role === 'patient' && request.id !== appointment.patient) {
         return next(new ErrorResponse("Not Authorized", 403));
     }
+
     if (request.role === 'employee') {
         let employee = await EmployeeSchema.findById(request.id);
 
-        if (employee.clinic !== appointment.clinic)
+        if (!employee.activate || employee.clinic !== appointment.clinic)
             return next(new ErrorResponse("Not Authorized", 403));
     }
 

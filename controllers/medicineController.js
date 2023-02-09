@@ -46,9 +46,15 @@ exports.deleteMedicine = (request, response, next) => {
     .catch((err) => next(new ErrorResponse(err.message)));
 };
 exports.getAllMedicine = (request, response, next) => {
+
+  if (request.role === 'employee' && request.user.activate) {
+    return next(new ErrorResponse("Not Authorized", 403));
+  }
+
+
   let sortBy;
   let fields;
-  let reqQuery = { ...request.query };
+  let reqQuery = {...request.query};
   const removedFields = ["select", "sort", "page", "limit"];
   removedFields.forEach((el) => delete reqQuery[el]);
   let queryStr = JSON.stringify(reqQuery);
@@ -81,14 +87,19 @@ exports.getAllMedicine = (request, response, next) => {
 };
 
 exports.getMedicineByID = (request, response, next) => {
-  MedicineSchema.findOne({ _id: request.params.id })
-    .then((data) => {
-      if (data != null) response.status(200).json(data);
-      else {
-        next(new ErrorResponse("Drug does not exist", 403));
-      }
-    })
-    .catch((error) => next(error));
+
+  if (request.role === 'employee' && request.user.activate) {
+    return next(new ErrorResponse("Not Authorized", 403));
+  }
+
+  MedicineSchema.findOne({_id: request.params.id})
+      .then((data) => {
+        if (data != null) response.status(200).json(data);
+        else {
+          next(new ErrorResponse("Drug does not exist", 403));
+        }
+      })
+      .catch((error) => next(error));
 };
 
 function convertTOmongooseSchema(data) {
