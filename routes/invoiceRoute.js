@@ -13,7 +13,7 @@ const {authorize} = require("../middlewares/authMW");
      * @swagger
      * tags:
      *   name: Invoices
-     *   description: API to Manage Reviews
+     *   description: API to Manage Invoices
      */
     
     /** 
@@ -56,7 +56,7 @@ const {authorize} = require("../middlewares/authMW");
      *         "200":
      *           $ref: '#/components/responses/200'
      *         "201":
-     *           description: Invoices created successfully
+     *           description: Invoice created successfully
      *           contents:
      *             application/json
      */

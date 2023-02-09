@@ -50,9 +50,9 @@ server.use(
 server.use(express.json());
 
 // routes
-//server.use("/api/v1/auth", authRoute);
+server.use("/api/v1/auth", authRoute);
 
-//server.use(authMW);
+server.use(authMW);
 server.use("/api/v1/clinics", clinicRoute);
 server.use("/api/v1/medicines", medicineRoute);
 server.use("/api/v1/doctors", doctorRoute);

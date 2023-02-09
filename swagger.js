@@ -154,6 +154,52 @@ const options = {
                 }
             
             }
+            ,
+            Patient: {
+                type: 'object',
+                required: ['name', 'email', 'password','age'],
+                properties: {
+                    id:{
+                        type: 'integer',
+                        description: 'The ID of The Patient'
+                    },
+                    name: {
+                        type: 'string',
+                        description: 'The Name of The Patient'
+                    },
+                    email: {
+                        type: 'string',
+                        description: 'The Email of The Patient'
+                    },
+                    
+                    password: {
+                        type: 'string',
+                        description: "Password for the patient Account"
+                    }
+                    ,
+                    age: {
+                        type: 'integer',
+                        description: 'The Patient Age'
+                    }
+                    ,
+                    createdAt: {
+                        type: 'date',
+                        description: 'Calculated in Run Time'
+                    }
+                },
+                example: {              
+                    
+                      
+                        "name" : "Mohamed",
+                        "email" : "MohamedWarda@gmail.com",
+                        "password" : "1234567",
+                        "age" : 25,
+
+                    
+                }
+            
+            }
+            
             
         },
         responses : {
@@ -200,7 +246,8 @@ const options = {
     },
     apis: ["./routes/reviewsRoute.js",
     "./routes/appointmentRoute.js",
-    "./routes/invoiceRoute.js"],
+    "./routes/invoiceRoute.js",
+    "./routes/patientsRoute.js"],
 }
 
 module.exports = options
