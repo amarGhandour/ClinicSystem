@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const ErrorResponse = require("../utils/ErrorResponse");
 require("./../models/appointment");
-const appointmentSchema = mongoose.model("appointment");
-const clinicSchema = mongoose.model("clinic");
-const doctorSchema = mongoose.model("doctors");
+const AppointmentSchema = mongoose.model("appointment");
+const ClinicSchema = mongoose.model("clinic");
+const DoctorSchema = mongoose.model("doctors");
 const PatientSchema = mongoose.model("patients");
 
 
@@ -20,7 +20,7 @@ exports.getAllAppointments = async (request, response, next) => {
 
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-        let query = appointmentSchema.find(JSON.parse(queryStr))/*.populate({ path: "clinic",select:'name -_id' }).populate({ path: "patient",select:'name -_id' }).populate({ path: "doctor",select:'name -_id' })*/
+        let query = AppointmentSchema.find(JSON.parse(queryStr))/*.populate({ path: "clinic",select:'name -_id' }).populate({ path: "patient",select:'name -_id' }).populate({ path: "doctor",select:'name -_id' })*/
 
         if (request.query.select) {
             const fields = request.query.select.split(',').join(' ');
@@ -38,7 +38,7 @@ exports.getAllAppointments = async (request, response, next) => {
         const limit = parseInt(request.query.limit, 10) || 10;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        const docNumber = await appointmentSchema.countDocuments(JSON.parse(queryStr));
+        const docNumber = await AppointmentSchema.countDocuments(JSON.parse(queryStr));
 
         query = query.skip(startIndex).limit(limit);
 
@@ -71,7 +71,7 @@ exports.getAllAppointments = async (request, response, next) => {
 exports.addAppointment = async (request, response, next) => {
 
     try {
-        let clinic = await clinicSchema.findById(request.body.clinic);
+        let clinic = await ClinicSchema.findById(request.body.clinic);
 
         if (!clinic)
             return next(new ErrorResponse("clinic not found.", 422));
@@ -80,7 +80,7 @@ exports.addAppointment = async (request, response, next) => {
         if (!patient)
             return next(new ErrorResponse("patient not found", 422));
 
-        let doctor = await doctorSchema.findById(request.body.doctor);
+        let doctor = await DoctorSchema.findById(request.body.doctor);
         if (!doctor)
             return next(new ErrorResponse("doctor not found", 422));
 
@@ -88,7 +88,7 @@ exports.addAppointment = async (request, response, next) => {
             return next(new ErrorResponse('doctor does not work in this clinic ', 422));
         }
 
-        let appointments = await appointmentSchema.find({
+        let appointments = await AppointmentSchema.find({
             doctor: request.body.doctor,
             day: request.body.day,
             clinic: request.body.clinic
@@ -121,7 +121,7 @@ exports.addAppointment = async (request, response, next) => {
 
         }
 
-        let newAppointment = new appointmentSchema({
+        let newAppointment = new AppointmentSchema({
             patient: request.body.patient,
             clinic: request.body.clinic,
             doctor: request.body.doctor,
@@ -145,12 +145,12 @@ exports.addAppointment = async (request, response, next) => {
 exports.updateAppointment = async (request, response, next) => {
 
     try {
-        let appointment = await appointmentSchema.findById(request.params.id);
+        let appointment = await AppointmentSchema.findById(request.params.id);
 
         if (!appointment)
             return next(new ErrorResponse('Appointment does not exist', 404));
 
-        let doctor = await doctorSchema.findById(appointment.doctor);
+        let doctor = await DoctorSchema.findById(appointment.doctor);
 
         let scheduleIndex = -1;
         for (let i = 0; i < doctor.schedule.length; i++) {
@@ -168,11 +168,11 @@ exports.updateAppointment = async (request, response, next) => {
             });
         }
 
-        let appointments = await appointmentSchema.find({doctor: appointment.doctor, day: request.body.day})
+        let appointments = await AppointmentSchema.find({doctor: appointment.doctor, day: request.body.day})
 
         if (appointments.length <= doctor.schedule[scheduleIndex].timeline.maxApp) {
 
-            appointmentSchema.updateOne({_id: request.params.id}, {
+            AppointmentSchema.updateOne({_id: request.params.id}, {
                 $set: {
                     day: request.body.day
                 }
@@ -195,7 +195,7 @@ exports.updateAppointment = async (request, response, next) => {
 
 
 exports.getAppointmentByID = (request, response, next) => {
-    appointmentSchema.findOne({_id: request.params.id})
+    AppointmentSchema.findOne({_id: request.params.id})
         .then((data) => {
             response.status(200).json({
                 success: true,
@@ -206,7 +206,7 @@ exports.getAppointmentByID = (request, response, next) => {
 };
 
 exports.deleteAppointment = (request, response, next) => {
-    appointmentSchema.deleteOne({_id: request.params.id})
+    AppointmentSchema.deleteOne({_id: request.params.id})
         .then((result) => {
             response.status(204).json({success: true})
         })
