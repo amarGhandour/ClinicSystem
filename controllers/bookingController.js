@@ -31,7 +31,7 @@ exports.pay = async (request, response, next) => {
         if (!patient)
             return next(new ErrorResponse("patient not exist", 404));
 
-        const doctor = await DoctorsSchema.findOne({_id: request.params.doctorId});
+        const doctor = await DoctorsSchema.findOne({_id: request.params.id});
 
         if (!doctor)
             return next(new ErrorResponse("doctor not exist", 404));
@@ -90,11 +90,14 @@ exports.pay = async (request, response, next) => {
 
 exports.payCash = async (request, response, next) => {
 
+    // todo check if employee has access
+
     try {
-        const patient = await PatientSchema.findOne({_id: request.id});
+        const patient = await PatientSchema.findOne({_id: request.body.patientId});
         if (!patient)
             return next(new ErrorResponse("patient not exist", 404));
-        const doctor = await DoctorsSchema.findOne({_id: request.params.doctorId});
+
+        const doctor = await DoctorsSchema.findOne({_id: request.body.doctorId});
         if (!doctor)
             return next(new ErrorResponse("doctor not exist", 404));
 
@@ -102,7 +105,7 @@ exports.payCash = async (request, response, next) => {
             patientId: patient._id,
             doctorId: doctor._id,
             status: "success",
-            total: request.body.price || doctor.examPrice,
+            total: doctor.examPrice,
             paymentMethod: "cash",
             description: `${doctor.specilization} doctor examination.`,
         });

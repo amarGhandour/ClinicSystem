@@ -5,9 +5,11 @@ const AppointmentSchema = mongoose.model("appointment");
 const ClinicSchema = mongoose.model("clinic");
 const DoctorSchema = mongoose.model("doctors");
 const PatientSchema = mongoose.model("patients");
+const EmployeeSchema = mongoose.model("employee");
 
 
 exports.getAllAppointments = async (request, response, next) => {
+
 
     try {
         const reqQuery = {...request.query};
@@ -145,10 +147,15 @@ exports.addAppointment = async (request, response, next) => {
 exports.updateAppointment = async (request, response, next) => {
 
     try {
+
         let appointment = await AppointmentSchema.findById(request.params.id);
 
         if (!appointment)
             return next(new ErrorResponse('Appointment does not exist', 404));
+
+        if (request.role === 'patient' && appointment.patient !== request.id) {
+            return next(new ErrorResponse("Not Authorized", 403));
+        }
 
         let doctor = await DoctorSchema.findById(appointment.doctor);
 
@@ -194,18 +201,41 @@ exports.updateAppointment = async (request, response, next) => {
 }
 
 
-exports.getAppointmentByID = (request, response, next) => {
-    AppointmentSchema.findOne({_id: request.params.id})
-        .then((data) => {
-            response.status(200).json({
-                success: true,
-                data: data
-            });
-        })
-        .catch((error) => next(new ErrorResponse(" does not exist", 422)));
+exports.getAppointmentByID = async (request, response, next) => {
+
+    let appointment = await AppointmentSchema.findOne({_id: request.params.id});
+
+    if (!appointment) {
+        return next(new ErrorResponse("Not found", 404));
+    }
+
+    if (request.role === 'patient' && request.id !== appointment.patient) {
+        return next(new ErrorResponse("Not Authorized", 403));
+    }
+    if (request.role === 'employee') {
+        let employee = await EmployeeSchema.findById(request.id);
+
+        if (employee.clinic !== appointment.clinic)
+            return next(new ErrorResponse("Not Authorized", 403));
+    }
+
+    response.status(200).json({
+        success: true,
+        data: appointment
+    });
 };
 
-exports.deleteAppointment = (request, response, next) => {
+exports.deleteAppointment = async (request, response, next) => {
+
+    let appointment = await AppointmentSchema.findById(request.params.id);
+
+    if (!appointment)
+        return next(new ErrorResponse("appointment not found", 404));
+
+    if (request.role === 'patient' && appointment.patient !== request.id) {
+        return next(new ErrorResponse("Not Authorized", 403));
+    }
+
     AppointmentSchema.deleteOne({_id: request.params.id})
         .then((result) => {
             response.status(204).json({success: true})

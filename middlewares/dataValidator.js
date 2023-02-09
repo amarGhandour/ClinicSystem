@@ -172,30 +172,30 @@ let checkEmailUnique = async function (email) {
   return isEmailExist;
 };
 let invoiceValidation = [
-  body("patientId").isInt().withMessage("patientId must be integer"),
-  body("patientId").isInt().withMessage("patientId must be integer"),
-  body("status")
-    .isIn(["incomplete", "failed", "success"])
-    .withMessage("status must be incomplete||failed||success"),
-  body("description").isString().withMessage("description must be string"),
-  body("total").isInt().withMessage("fees must be integer"),
-  body("paymentMethod")
-    .isIn(["cash", "Credit Card", "Insurance Card"])
-    .withMessage("paymentMethod must be cash|| credit Card || Insurance Card"),
+    body("patientId").isInt().withMessage("patientId must be integer"),
+    body("doctorId").isInt().withMessage("doctorId must be integer"),
+    body("status")
+        .isIn(["incomplete", "failed", "success"])
+        .withMessage("status must be incomplete||failed||success"),
+    body("description").isString().withMessage("description must be string"),
+    body("total").isInt().withMessage("fees must be integer"),
+    body("paymentMethod")
+        .isIn(["cash", "Credit Card", "Insurance Card"])
+        .withMessage("paymentMethod must be cash|| credit Card || Insurance Card"),
 ];
 let invoiceValidationForPatch = [
-  body("patientId").isInt().withMessage("patientId must be integer").optional(),
-  body("patientId").isInt().withMessage("patientId must be integer").optional(),
-  body("status")
-    .isIn(["incomplete", "failed", "success"])
-    .withMessage("status must be incomplete||failed||success")
-    .optional(),
-  body("description").isString().withMessage("description must be string"),
-  body("total").isInt().withMessage("fees must be integer").optional(),
-  body("paymentMethod")
-    .isIn(["cash", "Credit Card", "Insurance Card"])
-    .withMessage("paymentMethod must be cash|| credit Card || Insurance Card")
-    .optional(),
+    body("patientId").isInt().withMessage("patientId must be integer").optional(),
+    body("doctorId").isInt().withMessage("doctorId must be integer").optional(),
+    body("status")
+        .isIn(["incomplete", "failed", "success"])
+        .withMessage("status must be incomplete||failed||success")
+        .optional(),
+    body("description").isString().withMessage("description must be string"),
+    body("total").isInt().withMessage("fees must be integer").optional(),
+    body("paymentMethod")
+        .isIn(["cash", "Credit Card", "Insurance Card"])
+        .withMessage("paymentMethod must be cash|| credit Card || Insurance Card")
+        .optional(),
 ];
 
 let appointmentValidation = [
@@ -203,7 +203,6 @@ let appointmentValidation = [
     body("doctor").isInt().withMessage("doctor must be integer"),
     body("patient").isInt().withMessage("patient must be integer"),
     body("payment").isIn(["cash", "visa"]).withMessage("Invalid payment method"),
-
 ];
 let prescriptionValidation = [
     body("doctorId").isInt().withMessage("doctor id is required"),
@@ -222,10 +221,14 @@ let prescriptionValidationForPatch = [
     body("drugs.*.details").isString().withMessage("details is string").optional()
 ];
 
-
+let paymentCashValidation = [
+    body("doctorId").isInt().withMessage("doctor must be integer"),
+    body("patientId").isInt().withMessage("patient must be integer"),
+];
 
 
 module.exports = {
+    paymentCashValidation,
     medicineValidation,
     medicineValidationForPatch,
     clinicValidation,

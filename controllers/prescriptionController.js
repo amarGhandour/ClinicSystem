@@ -6,7 +6,7 @@ const {request} = require("express");
 
 const PrescriptionSchema = mongoose.model("prescriptions");
 const DoctorSchema = mongoose.model("doctors");
-const patientSchema = mongoose.model("patients");
+const PatientSchema = mongoose.model("patients");
 const ClinicShema = mongoose.model("clinic");
 
 
@@ -55,7 +55,7 @@ exports.getAllPrescriptionsForDoctor = async (request, response, next) => {
 }
 exports.getAllPrescriptionsForPatient = async (request, response, next) => {
     try {
-        let patient = await patientSchema.findOne({_id: request.params.patientId})
+        let patient = await PatientSchema.findOne({_id: request.params.patientId})
         if (!patient) return next(new ErrorResponse("patient not found", 422))
 
         let prescription = await PrescriptionSchema.find({patientId: request.params.patientId})
@@ -70,7 +70,7 @@ exports.addPrescription = async (request, response, next) => {
     let doctor = await DoctorSchema.findOne({_id: request.body.doctorId})
     if (!doctor) return next(new ErrorResponse("Doctor not found", 422));
 
-    let patient = await patientSchema.findOne({_id: request.body.patientId})
+    let patient = await PatientSchema.findOne({_id: request.body.patientId})
     if (!patient) return next(new ErrorResponse("patient not found", 422));
 
     let clinic = await ClinicShema.findOne({_id: request.body.clinicId})
@@ -94,12 +94,25 @@ exports.addPrescription = async (request, response, next) => {
 exports.updatePrescription = async (request, response, next) => {
 
     try {
+        if (request.role === 'doctor') {
+            let doctor = await DoctorSchema.findOne({_id: request.id})
+            if (!doctor) return next(new ErrorResponse("Doctor not found", 422));
+
+            let prescription = await PrescriptionSchema.findById(request.body.id);
+            if (!prescription) return next(new ErrorResponse("prescription not found", 422));
+
+            if (prescription.doctorId !== request.id) {
+                return next(new ErrorResponse("Not Authorized", 403));
+            }
+        }
+
         if (request.body.doctorId) {
             let doctor = await DoctorSchema.findOne({_id: request.body.doctorId})
-            if (!doctor) return next(new ErrorResponse("Doctor not found", 422));
+            if (!doctor) return next(new ErrorResponse("patient not found", 422));
         }
+
         if (request.body.patientId) {
-            let patient = await patientSchema.findOne({_id: request.body.patientId})
+            let patient = await PatientSchema.findOne({_id: request.body.patientId})
             if (!patient) return next(new ErrorResponse("patient not found", 422));
         }
 

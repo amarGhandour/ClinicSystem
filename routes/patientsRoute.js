@@ -5,7 +5,7 @@ const validator = require("./../Middlewares/errorValidator")
 const {authorize} = require("../middlewares/authMW");
 const router = express.Router();
 
-router.route("/")
+router.route("/").all(authorize('admin'))
     .get(controller.getAllPatients)
     .post(
         [
@@ -22,7 +22,7 @@ router.route("/")
 router.get("/:id", param("id").isInt().withMessage("id must be integer")
     ,
     validator,
-    controller.getPatientByID);
+    authorize('admin'), controller.getPatientByID);
 
 
 module.exports = router;

@@ -34,17 +34,12 @@ exports.register = async (request, response, next) => {
 exports.login = async (request, response, next) => {
 
     try {
-        if (request.body.email === process.env.ADMIN_EMAIL && request.body.password === process.env.ADMIN_PASS) {
-            // todo
-            // get admin from employees
-            // create a token for him with a response
-        } else {
             let user = null;
             user = await PatientSchema.findOne({email: request.body.email}).select('+password');
 
             if (!user) {
                 user = await DoctorsSchema.findOne({email: request.body.email}).select('+password');
-                console.log(user)
+
                 if (!user) {
                     user = await EmployeesSchema.findOne({email: request.body.email}).select('+password');
                 }
@@ -65,7 +60,6 @@ exports.login = async (request, response, next) => {
                 success: true,
                 token: token
             });
-        }
 
     } catch (err) {
         next(new ErrorResponse(err.message));

@@ -39,19 +39,17 @@ server.use(express.json());
 server.use("/api/v1/clinics", clinicRoute);
 server.use("/api/v1/services", sevicesRoute);
 server.use("/api/v1/medicines", medicineRoute);
-server.use("/api/v1/employees", employeeRoute);
 server.use("/api/v1/doctors", doctorRoute);
 server.use("/api/v1/prescriptions", prescriptionRoute);
-server.use("/api/v1/patients", patientRoute);
 server.use("/api/v1/invoices", invoiceRoute);
 server.use("/api/v1/appointments", appointmentRoute);
 server.use("/api/v1/auth", authRoute);
 
 
 server.use(authMW);
-
 server.use("/api/v1/booking", bookingRoute);
-
+server.use("/api/v1/patients", patientRoute);
+server.use("/api/v1/employees", employeeRoute);
 server.use("/api/v1/patients", patientRoute);
 
 server.use((request, response, next) => {
