@@ -1,4 +1,4 @@
-const { body, query, param, validationResult } = require("express-validator");
+const {body, query, param, validationResult} = require("express-validator");
 const ErrorResponse = require("../utils/ErrorResponse");
 require("../models/patient");
 require("../models/doctor");
@@ -6,19 +6,19 @@ require("../models/employee");
 
 const mongoose = require("mongoose");
 
-const patientSchema = mongoose.model("patients");
-const doctorSchema = mongoose.model("doctors");
-const employeeSchema = mongoose.model("employee");
+const PatientSchema = mongoose.model("patients");
+const DoctorSchema = mongoose.model("doctors");
+const EmployeeSchema = mongoose.model("employee");
 
 let idValidation = param("id").isInt().withMessage("id should be number ");
 let medicineValidation = [
-  body("name").isString().withMessage("Medicine Name must be String"),
-  body("quantity").isInt().withMessage("Quantity must be number"),
-  body("expireDate")
-    .isDate()
-    .withMessage("Expire Date must be a date (year-month-day)"),
-  body("productionDate")
-    .isDate()
+    body("name").isString().withMessage("Medicine Name must be String"),
+    body("quantity").isInt().withMessage("Quantity must be number"),
+    body("expireDate")
+        .isDate()
+        .withMessage("Expire Date must be a date (year-month-day)"),
+    body("productionDate")
+        .isDate()
     .withMessage("Expire Date must be a date (year-month-day)"),
   body("price").isFloat().withMessage("Price must be number 0.000"),
 ];
@@ -132,17 +132,17 @@ let employeeValidation = [
     .optional(),
 ];
 
-let DoctorValidation = [
-  body("age")
-    .isInt({ min: 25, max: 60 })
-    .withMessage("age should be Integer between 25 and 60"),
-  body("name").isLength({ max: 30 }).withMessage("Name must be <30"),
-  body("password")
-    .isStrongPassword()
-    .withMessage("password must be strong")
-    .isLength({ min: 8, max: 20 }),
-  body("email").isEmail().withMessage("Invalid Email"),
-  body("specilization").isString().withMessage("Specilization must be string"),
+let doctorValidation = [
+    body("age")
+        .isInt({min: 25, max: 60})
+        .withMessage("age should be Integer between 25 and 60"),
+    body("name").isLength({max: 30}).withMessage("Name must be <30"),
+    body("password")
+        .isStrongPassword()
+        .withMessage("password must be strong")
+        .isLength({min: 8, max: 20}),
+    body("email").isEmail().withMessage("Invalid Email"),
+    body("specilization").isString().withMessage("Specilization must be string"),
   body("clinics").isArray().withMessage("Clinics must be entered as an array"),
   body("clinics.*").isNumeric().withMessage("Each clinic Id must be number"),
   body("schedule")
@@ -153,18 +153,18 @@ let DoctorValidation = [
 
 let checkEmailUnique = async function (email) {
   let isEmailExist = null;
-  isEmailExist = await patientSchema.exists({ email: email });
+    isEmailExist = await PatientSchema.exists({email: email});
 
   if (isEmailExist) {
     throw new ErrorResponse("Email is exist", 422);
   }
 
-  isEmailExist = await doctorSchema.exists({ email: email });
+    isEmailExist = await DoctorSchema.exists({email: email});
   if (isEmailExist) {
     throw new ErrorResponse("Email is exist", 422);
   }
 
-  isEmailExist = await employeeSchema.exists({ email: email });
+    isEmailExist = await EmployeeSchema.exists({email: email});
   if (isEmailExist) {
     throw new ErrorResponse("Email is exist", 422);
   }
@@ -199,47 +199,47 @@ let invoiceValidationForPatch = [
 ];
 
 let appointmentValidation = [
-  body("clinic").isInt().withMessage("clinic must be integer"),
-  body("doctor").isInt().withMessage("doctor must be integer"),
-  body("patient").isInt().withMessage("patient must be integer"),
-  body("payment").isIn(["cash", "visa"]).withMessage("Invalid payment method"),
+    body("clinic").isInt().withMessage("clinic must be integer"),
+    body("doctor").isInt().withMessage("doctor must be integer"),
+    body("patient").isInt().withMessage("patient must be integer"),
+    body("payment").isIn(["cash", "visa"]).withMessage("Invalid payment method"),
 
 ];
-let PrescriptionValidation=[
-        body("doctorId").isInt().withMessage("doctor id is required"),
-        body("patientId").isInt().withMessage("patient id is required"),
-        body("clinicId").isInt().withMessage("clinicid is required"),
-        body("drugs").isArray().withMessage("drug is array"),
-        body("drugs.*.drug").isString().withMessage("drug id is required"),
-        body("drugs.*.details").isString().withMessage("details is string")
+let prescriptionValidation = [
+    body("doctorId").isInt().withMessage("doctor id is required"),
+    body("patientId").isInt().withMessage("patient id is required"),
+    body("clinicId").isInt().withMessage("clinicid is required"),
+    body("drugs").isArray().withMessage("drug is array"),
+    body("drugs.*.drug").isString().withMessage("drug id is required"),
+    body("drugs.*.details").isString().withMessage("details is string")
 ];
-let PrescriptionValidationForPatch=[
-  body("doctorId").isInt().withMessage("doctor id is required").optional(),
-  body("patientId").isInt().withMessage("patient id is required").optional(),
-  body("clinicId").isInt().withMessage("clinicid is required").optional(),
-  body("drugs").isArray().withMessage("drug is array").optional(),
-  body("drugs.*.drug").isString().withMessage("drug id is required").optional(),
-  body("drugs.*.details").isString().withMessage("details is string").optional()
+let prescriptionValidationForPatch = [
+    body("doctorId").isInt().withMessage("doctor id is required").optional(),
+    body("patientId").isInt().withMessage("patient id is required").optional(),
+    body("clinicId").isInt().withMessage("clinicid is required").optional(),
+    body("drugs").isArray().withMessage("drug is array").optional(),
+    body("drugs.*.drug").isString().withMessage("drug id is required").optional(),
+    body("drugs.*.details").isString().withMessage("details is string").optional()
 ];
 
 
 
 
 module.exports = {
-  medicineValidation,
-  medicineValidationForPatch,
-  clinicValidation,
-  serviceValidation,
-  employeeValidation,
-  employeeValidationForPatch,
-  DoctorValidation,
-  clinicValidationForPatch,
-  serviceValidationForPatch,
-  idValidation,
-  appointmentValidation,
-  checkEmailUnique,
-  invoiceValidation,
-  invoiceValidationForPatch,
-  PrescriptionValidation,
-  PrescriptionValidationForPatch,
+    medicineValidation,
+    medicineValidationForPatch,
+    clinicValidation,
+    serviceValidation,
+    employeeValidation,
+    employeeValidationForPatch,
+    doctorValidation,
+    clinicValidationForPatch,
+    serviceValidationForPatch,
+    idValidation,
+    appointmentValidation,
+    checkEmailUnique,
+    invoiceValidation,
+    invoiceValidationForPatch,
+    prescriptionValidation,
+    prescriptionValidationForPatch,
 };

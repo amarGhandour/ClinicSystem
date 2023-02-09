@@ -1,8 +1,8 @@
-const services = require("../models/services");
+const Services = require("../models/services");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 exports.getServices = (req, res, next) => {
-  services
+    Services
     .find()
     .populate([{ path: "clinic", select: "location" }])
     .then((result) => {
@@ -18,11 +18,11 @@ exports.getServices = (req, res, next) => {
 
 exports.addService = (req, res, next) => {
   console.log(req.body);
-  const newservices = new services({
-    name: req.body.name,
-    description: req.body.description,
-    clinic: req.body.clinic,
-  });
+    const newservices = new Services({
+        name: req.body.name,
+        description: req.body.description,
+        clinic: req.body.clinic,
+    });
   newservices
     .save()
     .then((result) => {
@@ -39,10 +39,10 @@ exports.addService = (req, res, next) => {
 
 exports.updateServices = (req, res, next) => {
   console.log(req.body);
-  const services = new services({
-    name: req.body.name,
-    description: req.body.description,
-  });
+    const services = new Services({
+        name: req.body.name,
+        description: req.body.description,
+    });
   services
     .updateOne({ _id: req.params.id }, services)
     .then((result) => {
@@ -57,7 +57,7 @@ exports.updateServices = (req, res, next) => {
 };
 
 exports.deleteServices = (req, res, next) => {
-  services
+    Services
     .deleteOne({ _id: req.params.id })
     .then((result) => {
       res.status(200).json({
@@ -71,7 +71,7 @@ exports.deleteServices = (req, res, next) => {
 };
 
 exports.getServiceById = (req, res, next) => {
-  services
+    Services
     .findById(req.params.id)
     .then((result) => {
       res.status(200).json({
@@ -85,7 +85,7 @@ exports.getServiceById = (req, res, next) => {
 };
 
 exports.deleteServiceById = (req, res, next) => {
-  services
+    Services
     .findByIdAndDelete(req.params.id)
     .then((result) => {
       

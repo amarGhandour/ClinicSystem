@@ -6,15 +6,15 @@ require('../models/employee');
 const ErrorResponse = require("../utils/ErrorResponse");
 const {checkEmailUnique} = require("../middlewares/dataValidator");
 
-const patientSchema = mongoose.model("patients");
-const employeesSchema = mongoose.model("employee");
-const doctorsSchema = mongoose.model("doctors");
+const PatientSchema = mongoose.model("patients");
+const EmployeesSchema = mongoose.model("employee");
+const DoctorsSchema = mongoose.model("doctors");
 
 exports.register = async (request, response, next) => {
 
     try {
         await checkEmailUnique(request.body.email);
-        const Patient = new patientSchema({
+        const Patient = new PatientSchema({
             name: request.body.name,
             age: request.body.age,
             password: request.body.password,
@@ -40,13 +40,13 @@ exports.login = async (request, response, next) => {
             // create a token for him with a response
         } else {
             let user = null;
-            user = await patientSchema.findOne({email: request.body.email}).select('+password');
+            user = await PatientSchema.findOne({email: request.body.email}).select('+password');
 
             if (!user) {
-                user = await doctorsSchema.findOne({email: request.body.email}).select('+password');
+                user = await DoctorsSchema.findOne({email: request.body.email}).select('+password');
                 console.log(user)
                 if (!user) {
-                    user = await employeesSchema.findOne({email: request.body.email}).select('+password');
+                    user = await EmployeesSchema.findOne({email: request.body.email}).select('+password');
                 }
             }
             if (!user) {

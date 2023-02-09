@@ -3,11 +3,11 @@ require("./../models/patient");
 const {checkEmailUnique} = require("../middlewares/dataValidator");
 const ErrorResponse = require("../utils/ErrorResponse");
 
-const patientSchema = mongoose.model("patients");
+const PatientSchema = mongoose.model("patients");
 
 exports.getAllPatients = (request, response, next) => {
 
-    patientSchema.find()
+    PatientSchema.find()
         .then((data) => {
             response.status(200).json(data);
         })
@@ -19,7 +19,7 @@ exports.addPatient = async (request, response, next) => {
     try {
         await checkEmailUnique(request.body.email);
 
-        let newPatients = new patientSchema({
+        let newPatients = new PatientSchema({
             name: request.body.name,
             age: request.body.age,
             password: request.body.password,
@@ -40,7 +40,7 @@ exports.addPatient = async (request, response, next) => {
 }
 
 exports.updateAllPatients = (request, response, next) => {
-    patientSchema.updateOne({_id: request.body.id}, {
+    PatientSchema.updateOne({_id: request.body.id}, {
         $set: {
             _id: request.body.id,
             fullname: request.body.name,
@@ -71,7 +71,7 @@ exports.updateAllPatients = (request, response, next) => {
 }
 
 exports.deletePatient = (request, response, next) => {
-    patientSchema.deleteOne({_id: request.body.id}, {}).then((data) => {
+    PatientSchema.deleteOne({_id: request.body.id}, {}).then((data) => {
 
         // check if the exist or not
         if (data.deletedCount == 0) {

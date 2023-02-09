@@ -8,9 +8,9 @@ require('../models/invoice');
 const ErrorResponse = require("../utils/ErrorResponse");
 const {response} = require("express");
 
-const patientSchema = mongoose.model("patients");
-const doctorsSchema = mongoose.model("doctors");
-const invoiceSchema = mongoose.model("invoices");
+const PatientSchema = mongoose.model("patients");
+const DoctorsSchema = mongoose.model("doctors");
+const InvoiceSchema = mongoose.model("invoices");
 
 
 exports.pay = async (request, response, next) => {
@@ -26,12 +26,12 @@ exports.pay = async (request, response, next) => {
     });
 
     try {
-        const patient = await patientSchema.findOne({_id: request.id});
+        const patient = await PatientSchema.findOne({_id: request.id});
 
         if (!patient)
             return next(new ErrorResponse("patient not exist", 404));
 
-        const doctor = await doctorsSchema.findOne({_id: request.params.doctorId});
+        const doctor = await DoctorsSchema.findOne({_id: request.params.doctorId});
 
         if (!doctor)
             return next(new ErrorResponse("doctor not exist", 404));
@@ -51,7 +51,7 @@ exports.pay = async (request, response, next) => {
                 });
             })
             .then((charge) => {
-                let newInvoice = new invoiceSchema({
+                let newInvoice = new InvoiceSchema({
                     patientId: patient._id,
                     doctorId: doctor._id,
                     status: "success",
@@ -69,7 +69,7 @@ exports.pay = async (request, response, next) => {
                     .catch((err) => next(new ErrorResponse(err.message)));
             })
             .catch((err) => {
-                let newInvoice = new invoiceSchema({
+                let newInvoice = new InvoiceSchema({
                     patientId: patient._id,
                     doctorId: doctor._id,
                     status: "failed",
@@ -91,14 +91,14 @@ exports.pay = async (request, response, next) => {
 exports.payCash = async (request, response, next) => {
 
     try {
-        const patient = await patientSchema.findOne({_id: request.id});
+        const patient = await PatientSchema.findOne({_id: request.id});
         if (!patient)
             return next(new ErrorResponse("patient not exist", 404));
-        const doctor = await doctorsSchema.findOne({_id: request.params.doctorId});
+        const doctor = await DoctorsSchema.findOne({_id: request.params.doctorId});
         if (!doctor)
             return next(new ErrorResponse("doctor not exist", 404));
 
-        let newInvoice = new invoiceSchema({
+        let newInvoice = new InvoiceSchema({
             patientId: patient._id,
             doctorId: doctor._id,
             status: "success",
