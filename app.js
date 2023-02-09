@@ -18,6 +18,7 @@ const prescriptionRoute = require("./routes/prescriptionRoute");
 const invoiceRoute = require("./routes/invoiceRoute");
 const bookingRoute = require("./routes/bookingRoute");
 const appointmentRoute = require("./routes/appointmentRoute");
+const reviewsRoute = require("./routes/reviewsRoute");
 const server = express();
 
 let port = process.env.PORT || 8080;
@@ -50,6 +51,7 @@ server.use("/api/v1/patients", patientRoute);
 server.use("/api/v1/employees", employeeRoute);
 server.use("/api/v1/patients", patientRoute);
 server.use("/api/v1/invoices", invoiceRoute);
+server.use("/api/v1/reviews", reviewsRoute);
 
 server.use((request, response, next) => {
     next(new ErrorResponse("Not found", 404));
