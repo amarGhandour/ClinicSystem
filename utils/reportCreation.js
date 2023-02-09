@@ -12,13 +12,15 @@ function createReportForAllInvoices(result) {
   doc.fontSize(16).text("Invoice Report", 50, 50, { align: "center" });
   // table header
   doc.fontSize(13).text("Created At", 50, 150);
-
-  doc.fontSize(13).text("ID", 250, 150);
-  doc.fontSize(13).text("Status", 350, 150);
+  doc.fontSize(13).text("Doctor Name", 250, 150);
+  doc.fontSize(13).text("Patient Name", 350, 150);
   doc.fontSize(13).text("Total", 450, 150);
-  doc.fontSize(13).text("Payment Method", 550, 150);
-
+  doc.fontSize(13).text("Services Name", 550, 150);
+  doc.fontSize(13).text("services Price", 650, 150);
+  doc.fontSize(13).text("Payment Method", 750, 150);
+ 
   result.forEach(function (obj, i) {
+    console.log(obj)
     doc
       .fontSize(12)
       .text(
@@ -26,10 +28,15 @@ function createReportForAllInvoices(result) {
         50,
         200 + i * 32
       );
-    doc.fontSize(12).text(`${obj._id}`, 250, 200 + i * 32);
-    doc.fontSize(12).text(`${obj.status}`, 350, 200 + i * 32);
+  
+    doc.fontSize(12).text(`${obj.doctorId.name}`, 250, 200 + i * 32 );
+    doc.fontSize(12).text(`${obj.patientId.name}`, 350, 200 + i * 32 );
     doc.fontSize(12).text(`${obj.total}`, 450, 200 + i * 32);
-    doc.fontSize(12).text(`${obj.paymentMethod}`, 550, 200 + i * 32);
+   obj.services.forEach(function (service, i) {
+    doc.fontSize(12).text(`${service.name}`, 550, 200 + i * 32);
+    doc.fontSize(12).text(`${service.price}`,650, 200 + i * 32);
+   });
+    doc.fontSize(12).text(`${obj.paymentMethod}`, 750, 200 + i * 32);
   });
   doc.moveTo(50, 170).lineTo(700, 170).stroke();
 
@@ -46,26 +53,30 @@ function createReportForInvoiveById(result) {
   doc.fontSize(16).text("Invoice Report", 50, 50, { align: "center" });
   // table header
   doc.fontSize(13).text("Created At", 50, 150);
+  doc.fontSize(13).text("Doctor Name", 250, 150);
+  doc.fontSize(13).text("Patient Name", 350, 150);
+  doc.fontSize(13).text("services Name", 450, 150);
+  doc.fontSize(13).text("services Price", 550, 150);
+  doc.fontSize(13).text("Payment Method", 650, 150);
 
-  doc.fontSize(13).text("ID", 250, 150);
-  doc.fontSize(13).text("Status", 350, 150);
-  doc.fontSize(13).text("Total", 450, 150);
-  doc.fontSize(13).text("Payment Method", 550, 150);
-
-  doc
-    .fontSize(12)
-    .text(
-      `${result.createdAt.toLocaleDateString()} ${result.createdAt.toLocaleTimeString()}`,
-      50,
-      200
-    );
-  doc.fontSize(12).text(`${result._id}`, 250, 200);
-  doc.fontSize(12).text(`${result.status}`, 350, 200);
-  doc.fontSize(12).text(`${result.total}`, 450, 200);
-  doc.fontSize(12).text(`${result.paymentMethod}`, 550, 200);
-
+  result.services.forEach(function (obj, i) {
+ console.log(obj)
+    doc
+      .fontSize(12)
+      .text(
+        `${result.createdAt.toLocaleDateString()} ${result.createdAt.toLocaleTimeString()}`,
+        50,
+        200 + i * 32
+      );
+    doc.fontSize(12).text(`${result.doctorId.name}`, 250, 200 + i * 32 );
+    doc.fontSize(12).text(`${result.patientId.name}`, 350, 200 + i * 32 );
+    doc.fontSize(12).text(`${obj.name}`, 450, 200 + i * 32);
+    doc.fontSize(12).text(`${obj.price}`, 550, 200 + i * 32);
+    doc.fontSize(12).text(`${result.paymentMethod}`, 650, 200 + i * 32);
+  })
+  
   doc.moveTo(50, 170).lineTo(700, 170).stroke();
-
+  doc.fontSize(12).text(`Total: ${result.total}`, 650, 280  );
   doc.end();
 }
 
@@ -121,6 +132,7 @@ function createReportForAppointmentById(result) {
   doc.fontSize(13).text("Payment", 620, 150);
   doc.fontSize(13).text("Day", 720, 150);
 
+   
   doc
     .fontSize(12)
     .text(

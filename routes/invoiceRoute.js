@@ -9,61 +9,60 @@ const {
 const controller = require("./../controllers/invoiceController");
 const {authorize} = require("../middlewares/authMW");
 
-  /**
-     * @swagger
-     * tags:
-     *   name: Invoices
-     *   description: API to Manage Reviews
-     */
-    
-    /** 
-     * @swagger
-     *   /invoices:
-     *     get:
-     *       summary: Get all invoices
-     *       tags: [Invoices]
-     *       responses:
-     *         "200":
-     *           description: The list of invoices
-     *           contents:
-     *             application/json:
-     *               schema:
-     *                 $ref: '#/components/schemas/Invoice'
-     *         "400":
-     *           $ref: '#/components/responses/400'
-     *         "401":
-     *           $ref: '#/components/responses/401'
-     */
-    
-   
-   /** 
-     * @swagger
-     *   /invoices:
-     *     post:
-     *       summary: Create a invoices
-     *       tags: [Invoices]
-     *       requestBody:
-     *         required: true
-     *         content:
-     *           application/json:
-     *             schema:
-     *               $ref: '#/components/schemas/Invoice'
-     *       responses:
-     *         "400":
-     *           $ref: '#/components/responses/400'
-     *         "401":
-     *           $ref: '#/components/responses/401'
-     *         "200":
-     *           $ref: '#/components/responses/200'
-     *         "201":
-     *           description: Invoices created successfully
-     *           contents:
-     *             application/json
-     */
-    
- 
+/**
+ * @swagger
+ * tags:
+ *   name: Invoices
+ *   description: API to Manage Reviews
+ */
 
-/** 
+/**
+ * @swagger
+ *   /invoices:
+ *     get:
+ *       summary: Get all invoices
+ *       tags: [Invoices]
+ *       responses:
+ *         "200":
+ *           description: The list of invoices
+ *           contents:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Invoice'
+ *         "400":
+ *           $ref: '#/components/responses/400'
+ *         "401":
+ *           $ref: '#/components/responses/401'
+ */
+
+
+/**
+ * @swagger
+ *   /invoices:
+ *     post:
+ *       summary: Create a invoices
+ *       tags: [Invoices]
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Invoice'
+ *       responses:
+ *         "400":
+ *           $ref: '#/components/responses/400'
+ *         "401":
+ *           $ref: '#/components/responses/401'
+ *         "200":
+ *           $ref: '#/components/responses/200'
+ *         "201":
+ *           description: Invoices created successfully
+ *           contents:
+ *             application/json
+ */
+
+
+/**
  * @swagger
  *   /invoices/{id}:
  *     get:
@@ -92,7 +91,7 @@ const {authorize} = require("../middlewares/authMW");
  */
 
 
-/** 
+/**
  * @swagger
  *   /invoices/doctorInvoices/{id}:
  *     get:
@@ -121,7 +120,7 @@ const {authorize} = require("../middlewares/authMW");
  */
 
 
-/** 
+/**
  * @swagger
  *   /invoices/patientInvoices/{id}:
  *     get:
@@ -148,7 +147,7 @@ const {authorize} = require("../middlewares/authMW");
  *         "404":
  *           $ref: '#/components/responses/404'
  */
-/** 
+/**
  * @swagger
  *   /invoices/{id}:
  *     delete:

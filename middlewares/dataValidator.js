@@ -278,22 +278,22 @@ let patientValidationForPatch = [
         .isLength({min: 1, max: 20}),
     body("email").isEmail().withMessage("Invalid Email").optional(),
 ]
-let reviewValidation = [    
-    body("title").isString().withMessage("title must be Text").isLength({ max: 100}).withMessage("Title length must be less than 100"),
+let reviewValidation = [
+    body("title").isString().withMessage("title must be Text").isLength({max: 100}).withMessage("Title length must be less than 100"),
     body("text").isString().withMessage("text must be Text"),
     body("rating").isInt().withMessage("rating must be integer"),
     body("doctor").isInt().withMessage("doctor ID must be integer"),
     body("patient").isInt().withMessage("patient ID must be integer")
-  
-  ];
-  let reviewValidationForPatch = [    
-    body("title").isString().optional().withMessage("title must be Text").isLength({ max: 100}).withMessage("Title length must be less than 100"),
+
+];
+let reviewValidationForPatch = [
+    body("title").isString().optional().withMessage("title must be Text").isLength({max: 100}).withMessage("Title length must be less than 100"),
     body("text").isString().optional().withMessage("text must be Text"),
     body("rating").isInt().optional().withMessage("rating must be integer"),
     body("doctor").isInt().optional().withMessage("doctor ID must be integer"),
     body("patient").isInt().optional().withMessage("patient ID must be integer")
-  
-  ];
+
+];
 module.exports = {
     paymentCashValidation,
     medicineValidation,

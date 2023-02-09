@@ -9,55 +9,55 @@ const {authorize} = require("../middlewares/authMW");
 
 
 /**
-     * @swagger
-     * tags:
-     *   name: Appointments
-     *   description: API to Manage Appointments
-     */
-    
-    /** 
-     * @swagger
-     *   /appointments:
-     *     get:
-     *       summary: Get all Appointments
-     *       tags: [Appointments]
-     *       responses:
-     *         "200":
-     *           description: The list of Appointments
-     *           contents:
-     *             application/json:
-     *               schema:
-     *                 $ref: '#/components/schemas/Appointment'
-     *         "400":
-     *           $ref: '#/components/responses/400'
-     *         "401":
-     *           $ref: '#/components/responses/401'
-     */
-    
-    /** 
-     * @swagger
-     *   /appointments:
-     *     post:
-     *       summary: Create a Appointment
-     *       tags: [Appointments]
-     *       requestBody:
-     *         required: true
-     *         content:
-     *           application/json:
-     *             schema:
-     *               $ref: '#/components/schemas/Appointment'
-     *       responses:
-     *         "400":
-     *           $ref: '#/components/responses/400'
-     *         "401":
-     *           $ref: '#/components/responses/401'
-     *         "201":
-     *           description: Appointment created successfully
-     *           contents:
-     *             application/json
-     */
-    
-/** 
+ * @swagger
+ * tags:
+ *   name: Appointments
+ *   description: API to Manage Appointments
+ */
+
+/**
+ * @swagger
+ *   /appointments:
+ *     get:
+ *       summary: Get all Appointments
+ *       tags: [Appointments]
+ *       responses:
+ *         "200":
+ *           description: The list of Appointments
+ *           contents:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Appointment'
+ *         "400":
+ *           $ref: '#/components/responses/400'
+ *         "401":
+ *           $ref: '#/components/responses/401'
+ */
+
+/**
+ * @swagger
+ *   /appointments:
+ *     post:
+ *       summary: Create a Appointment
+ *       tags: [Appointments]
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Appointment'
+ *       responses:
+ *         "400":
+ *           $ref: '#/components/responses/400'
+ *         "401":
+ *           $ref: '#/components/responses/401'
+ *         "201":
+ *           description: Appointment created successfully
+ *           contents:
+ *             application/json
+ */
+
+/**
  * @swagger
  *   /appointments/{id}:
  *     patch:
@@ -88,7 +88,7 @@ const {authorize} = require("../middlewares/authMW");
  *             application/json
  */
 
-/** 
+/**
  * @swagger
  *   /appointments/{id}:
  *     delete:
@@ -112,7 +112,7 @@ const {authorize} = require("../middlewares/authMW");
  *             application/json
  */
 
-/** 
+/**
  * @swagger
  *   /appointments/{id}:
  *     get:
@@ -141,21 +141,14 @@ const {authorize} = require("../middlewares/authMW");
  */
 
 
-
-
-
-
-
-
 router
     .route("/")
     .get(
-       // authorize('admin'),
-     controller.getAllAppointments)
+        // authorize('admin'),
+        controller.getAllAppointments)
     .post(
-        
-       // authorize('admin', 'patient', 'employee'),
-         appointmentValidation, validator, controller.addAppointment)
+        // authorize('admin', 'patient', 'employee'),
+        appointmentValidation, validator, controller.addAppointment)
 
 
 router
