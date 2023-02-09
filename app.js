@@ -1,6 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const authMW = require("./middlewares/authMW");
+const {init} = require("./utils/io");
+const cors = require('cors');
 
 require("dotenv").config({ path: "./config/.env" });
 const connectDB = require("./config/db");
@@ -20,7 +22,12 @@ const bookingRoute = require("./routes/bookingRoute");
 const appointmentRoute = require("./routes/appointmentRoute");
 const server = express();
 
+const app = require('http').createServer(server);
+server.use(cors());
+server.use(express.json());
+
 let port = process.env.PORT || 8080;
+const io = init(app);
 connectDB()
   .then((res) => {
     server.listen(port, () => {

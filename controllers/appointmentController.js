@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {getIo} = require('../utils/io');
 const ErrorResponse = require("../utils/ErrorResponse");
 require("./../models/appointment");
 const AppointmentSchema = mongoose.model("appointment");
@@ -132,6 +133,8 @@ exports.addAppointment = async (request, response, next) => {
         })
         newAppointment.save()
             .then((newApp) => {
+                const io = getIo();
+                io.emit('appointment', newApp);
                 response.status(201).json({
                     success: true,
                     data: newApp

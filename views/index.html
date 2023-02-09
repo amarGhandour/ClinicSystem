@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Notify Doctor</title>
+  </head>
+  <body>
+    <h1>Socket IO</h1>
+    <!--<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>-->
+    <script
+    src="https://cdn.socket.io/4.5.4/socket.io.min.js"
+    integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
+    crossorigin="anonymous"
+  >
+</script>
+    <script>
+      // listen for connection 
+      let socket = io("http://localhost:3000");
+      socket.on("connect", () => {
+        console.log("Connected to server");
+        socket.on("appointment", (newapp)=>{
+            console.log(newapp);
+        })
+
+      });
+    </script>
+
+  </body>
+ 
+  
+</html>
