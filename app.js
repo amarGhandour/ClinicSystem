@@ -11,6 +11,7 @@ const patientRoute = require("./routes/patientsRoute");
 const authRoute = require("./routes/authRoute");
 const medicineRoute = require("./routes/medicineRoute");
 const clinicRoute = require("./routes/clinicRoute");
+const reportRoute = require("./routes/reportsRoute");
 const sevicesRoute = require("./routes/servicesRoute");
 const employeeRoute = require("./routes/employee");
 const doctorRoute = require("./routes/doctorRoute");
@@ -43,6 +44,7 @@ server.use("/api/v1/doctors", doctorRoute);
 server.use("/api/v1/prescriptions", prescriptionRoute);
 server.use("/api/v1/invoices", invoiceRoute);
 server.use("/api/v1/appointments", appointmentRoute);
+server.use("/api/v1/reports", reportRoute)
 server.use("/api/v1/auth", authRoute);
 
 

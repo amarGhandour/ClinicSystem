@@ -7,16 +7,28 @@ const {
   idValidation,
 } = require("./../middlewares/dataValidator");
 const controller = require("./../controllers/invoiceController");
-const {authorize} = require("../middlewares/authMW");
+const { authorize } = require("../middlewares/authMW");
 
 router
-    .route("/").all(authorize('admin'))
-    .get(controller.getAllInvoices)
-    .post(authorize('employee'), invoiceValidation, validator, controller.addInvoice)
-    .patch(authorize('employee'), invoiceValidationForPatch, validator, controller.updateInvoice);
+  .route("/")
+  .all(authorize("admin"))
+  .get(controller.getAllInvoices)
+  .post(
+    authorize("employee"),
+    invoiceValidation,
+    validator,
+    controller.addInvoice
+  )
+  .patch(
+    authorize("employee"),
+    invoiceValidationForPatch,
+    validator,
+    controller.updateInvoice
+  );
 
 router
-    .route("/:id").all(authorize('admin', 'employee'))
+  .route("/:id")
+  .all(authorize("admin", "employee"))
   .delete(idValidation, validator, controller.deleteInvoice)
   .get(idValidation, validator, controller.getInvoiceByID);
 

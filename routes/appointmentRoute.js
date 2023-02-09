@@ -8,8 +8,13 @@ const controller = require("./../controllers/appointmentController");
 const {authorize} = require("../middlewares/authMW");
 router
     .route("/")
-    .get(authorize('admin'), controller.getAllAppointments)
-    .post(authorize('admin', 'patient', 'employee'), appointmentValidation, validator, controller.addAppointment)
+    .get(
+       // authorize('admin'),
+     controller.getAllAppointments)
+    .post(
+        
+       // authorize('admin', 'patient', 'employee'),
+         appointmentValidation, validator, controller.addAppointment)
 
 
 router
