@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {getIo} = require('../utils/io');
 const ErrorResponse = require("../utils/ErrorResponse");
 require("./../models/appointment");
 const AppointmentSchema = mongoose.model("appointment");
@@ -22,7 +23,10 @@ exports.getAllAppointments = async (request, response, next) => {
 
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-        let query = AppointmentSchema.find(JSON.parse(queryStr)).populate({ path: "clinic",select:'name -_id' }).populate({ path: "patient",select:'name -_id' }).populate({ path: "doctor",select:'name -_id' })
+        let query = AppointmentSchema.find(JSON.parse(queryStr)).populate({
+            path: "clinic",
+            select: 'name -_id'
+        }).populate({path: "patient", select: 'name -_id'}).populate({path: "doctor", select: 'name -_id'})
 
         if (request.query.select) {
             const fields = request.query.select.split(',').join(' ');
@@ -132,6 +136,8 @@ exports.addAppointment = async (request, response, next) => {
         })
         newAppointment.save()
             .then((newApp) => {
+                const io = getIo();
+                io.emit('appointment', newApp);
                 response.status(201).json({
                     success: true,
                     data: newApp

@@ -1,62 +1,62 @@
 const express = require("express");
 const router = express.Router();
-const { body, query, param, validationResult } = require("express-validator");
-const {reviewValidation,reviewValidationForPatch} = require("./../Middlewares/dataValidator");
+const {body, query, param, validationResult} = require("express-validator");
+const {reviewValidation, reviewValidationForPatch} = require("./../Middlewares/dataValidator");
 
 const validator = require("./../Middlewares/errorValidator");
 const controller = require("./../controllers/reviewsController");
 
 
-  /**
-     * @swagger
-     * tags:
-     *   name: Reviews
-     *   description: API to Manage Reviews
-     */
-    
-    /** 
-     * @swagger
-     *   /reviews:
-     *     get:
-     *       summary: Get all reviews
-     *       tags: [Reviews]
-     *       responses:
-     *         "200":
-     *           description: The list of Reviews
-     *           contents:
-     *             application/json:
-     *               schema:
-     *                 $ref: '#/components/schemas/Review'
-     *         "400":
-     *           $ref: '#/components/responses/400'
-     *         "401":
-     *           $ref: '#/components/responses/401'
-     */
-    
-    /** 
-     * @swagger
-     *   /reviews:
-     *     post:
-     *       summary: Create a Review
-     *       tags: [Reviews]
-     *       requestBody:
-     *         required: true
-     *         content:
-     *           application/json:
-     *             schema:
-     *               $ref: '#/components/schemas/Review'
-     *       responses:
-     *         "400":
-     *           $ref: '#/components/responses/400'
-     *         "401":
-     *           $ref: '#/components/responses/401'
-     *         "201":
-     *           description: Book created successfully
-     *           contents:
-     *             application/json
-     */
-    
-/** 
+/**
+ * @swagger
+ * tags:
+ *   name: Reviews
+ *   description: API to Manage Reviews
+ */
+
+/**
+ * @swagger
+ *   /reviews:
+ *     get:
+ *       summary: Get all reviews
+ *       tags: [Reviews]
+ *       responses:
+ *         "200":
+ *           description: The list of Reviews
+ *           contents:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Review'
+ *         "400":
+ *           $ref: '#/components/responses/400'
+ *         "401":
+ *           $ref: '#/components/responses/401'
+ */
+
+/**
+ * @swagger
+ *   /reviews:
+ *     post:
+ *       summary: Create a Review
+ *       tags: [Reviews]
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Review'
+ *       responses:
+ *         "400":
+ *           $ref: '#/components/responses/400'
+ *         "401":
+ *           $ref: '#/components/responses/401'
+ *         "201":
+ *           description: Book created successfully
+ *           contents:
+ *             application/json
+ */
+
+/**
  * @swagger
  *   /reviews/{id}:
  *     patch:
@@ -87,7 +87,7 @@ const controller = require("./../controllers/reviewsController");
  *             application/json
  */
 
-/** 
+/**
  * @swagger
  *   /reviews/{id}:
  *     delete:
@@ -111,7 +111,7 @@ const controller = require("./../controllers/reviewsController");
  *             application/json
  */
 
-/** 
+/**
  * @swagger
  *   /reviews/{id}:
  *     get:
@@ -139,15 +139,15 @@ const controller = require("./../controllers/reviewsController");
  *           $ref: '#/components/responses/404'
  */
 router
-  .route('/')
-  .get(
-    controller.getReviews)
-  .post(reviewValidation,validator,controller.addReview)
-  
+    .route('/')
+    .get(
+        controller.getReviews)
+    .post(reviewValidation, validator, controller.addReview)
+
 router
-  .route('/:id')
-  .get(controller.getReviewsForDoctor) 
-  .patch(reviewValidationForPatch,validator, controller.updateReview)
-  .delete(controller.deleteReview);
+    .route('/:id')
+    .get(controller.getReviewsForDoctor)
+    .patch(reviewValidationForPatch, validator, controller.updateReview)
+    .delete(controller.deleteReview);
 
 module.exports = router;

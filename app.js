@@ -6,7 +6,10 @@ const swaggerJsdoc = require("swagger-jsdoc")
 const swaggerUi = require("swagger-ui-express");
 const options = require('./swagger');
 //
-require("dotenv").config({ path: "./config/.env" });
+const {init} = require("./utils/io");
+const cors = require('cors');
+
+require("dotenv").config({path: "./config/.env"});
 const connectDB = require("./config/db");
 const errorHandler = require("./middlewares/error");
 const ErrorResponse = require("./utils/ErrorResponse");
@@ -29,16 +32,21 @@ const server = express();
 //
 const specs = swaggerJsdoc(options);
 server.use(
-  "/CMS-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(specs)
+    "/CMS-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(specs)
 )
 //
+const app = require('http').createServer(server);
+server.use(cors());
+server.use(express.json());
+
 let port = process.env.PORT || 8080;
+const io = init(app);
 connectDB()
-  .then((res) => {
-    server.listen(port, () => {
-      console.log("I am listening........", port);
+    .then((res) => {
+        server.listen(port, () => {
+            console.log("I am listening........", port);
     });
   })
   .catch((err) => console.log(`error: ${err.message}`));
