@@ -9,30 +9,31 @@ const {patientValidation, patientValidationForPatch, idValidation} = require("..
 const router = express.Router();
 
 const storage = multer.diskStorage({
-    destination : function ( req , file , cb ) {
-      cb( null , './public/images/' );
-    } ,
-    filename : function ( req , file , cb ) {
-      cb( null , new Date().toDateString() + file.originalname );
-    } ,
-  });
-  
-  const upload = multer({ 
-    storage : storage ,
-    limits : {
-      fileSize : 1024*1024*5 //5 = 5m
-    }, 
-  });
+    destination: function (req, file, cb) {
+        cb(null, './public/images/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, new Date().toDateString() + file.originalname);
+    },
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5 //5 = 5m
+    },
+});
+
 
 router.route("/").all(authorize('admin'))
     .get(controller.getAllPatients)
     .post(
         upload.single('image'),
         patientValidation, validator, controller.addPatient)
-    .patch(patientValidationForPatch, validator, controller.updateAllPatients);
+    .patch(patientValidationForPatch, validator, controller.updatePatient);
 
 
-router.get("/:id", param("id").isInt().withMessage("id must be integer")
+router.get("/:id", idValidation
     ,
     validator,
     authorize('admin'), controller.getPatientByID);

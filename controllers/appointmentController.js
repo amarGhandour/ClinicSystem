@@ -23,7 +23,10 @@ exports.getAllAppointments = async (request, response, next) => {
 
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-        let query = AppointmentSchema.find(JSON.parse(queryStr))/*.populate({ path: "clinic",select:'name -_id' }).populate({ path: "patient",select:'name -_id' }).populate({ path: "doctor",select:'name -_id' })*/
+        let query = AppointmentSchema.find(JSON.parse(queryStr)).populate({
+            path: "clinic",
+            select: 'name -_id'
+        }).populate({path: "patient", select: 'name -_id'}).populate({path: "doctor", select: 'name -_id'})
 
         if (request.query.select) {
             const fields = request.query.select.split(',').join(' ');

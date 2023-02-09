@@ -6,6 +6,7 @@ const controller = require("../Controllers/prescriptionController");
 const {authorize} = require("../middlewares/authMW");
 const router = express.Router();
 
+
 router.route("/")
     .get(authorize('admin'), controller.getAllPrescriptions)
     .post(authorize('admin', 'doctor'), prescriptionValidation, validator, controller.addPrescription)
