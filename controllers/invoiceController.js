@@ -37,8 +37,8 @@ exports.getAllInvoices = (request, response, next) => {
         .limit(limit)
         .skip(skip)
         .populate([
-            {path: "patients", select: "name"},
-            {path: "doctor", select: "name"},
+            {path: "patientId", select: "name"},
+            {path: "doctorId", select: "name"},
         ])
         .then((result) => {
             response.status(200).json({message: "success", result});

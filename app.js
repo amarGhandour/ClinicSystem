@@ -1,7 +1,11 @@
 const express = require("express");
 const morgan = require("morgan");
 const authMW = require("./middlewares/authMW");
-
+//
+const swaggerJsdoc = require("swagger-jsdoc")
+const swaggerUi = require("swagger-ui-express");
+const options = require('./swagger');
+//
 require("dotenv").config({ path: "./config/.env" });
 const connectDB = require("./config/db");
 const errorHandler = require("./middlewares/error");
@@ -21,6 +25,15 @@ const appointmentRoute = require("./routes/appointmentRoute");
 const reviewsRoute = require("./routes/reviewsRoute");
 const server = express();
 
+
+//
+const specs = swaggerJsdoc(options);
+server.use(
+  "/CMS-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs)
+)
+//
 let port = process.env.PORT || 8080;
 connectDB()
   .then((res) => {
@@ -37,9 +50,9 @@ server.use(
 server.use(express.json());
 
 // routes
-server.use("/api/v1/auth", authRoute);
+//server.use("/api/v1/auth", authRoute);
 
-server.use(authMW);
+//server.use(authMW);
 server.use("/api/v1/clinics", clinicRoute);
 server.use("/api/v1/medicines", medicineRoute);
 server.use("/api/v1/doctors", doctorRoute);

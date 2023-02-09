@@ -39,7 +39,7 @@ exports.addPatient = async (request, response, next) => {
 
 }
 
-exports.updateAllPatients = async (request, response, next) => {
+exports.updatePatient = async (request, response, next) => {
 
     if (request.body.email) {
         await checkEmailUnique(request.body.email);
