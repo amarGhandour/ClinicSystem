@@ -29,10 +29,10 @@ exports.getClinicServices = (req, res, next) => {
 exports.addClinicServices = (req, res, next) => {
   //console.log(req.body.services[0].name);
   //console.log(req.body.services[0].price);
-  const services=[]
-  req.body.services.forEach((service)=>{
-    services.push({name: service.name, price: service.price})
-  })
+  // const services=[]
+  // req.body.services.forEach((service)=>{
+  //   services.push({name: service.name, price: service.price})
+  // })
 
   const clinicServices = new ClinicServices({
     name: req.body.name,
@@ -40,7 +40,7 @@ exports.addClinicServices = (req, res, next) => {
     phone: req.body.phone,
     email: req.body.email,
     description: req.body.description,
-    services
+    services: req.body.services,
 
     //services: [{name: req.body.services[0].name, price: req.body.services[0].price}]
     
@@ -64,10 +64,10 @@ exports.updateClinicServices = async(req, res, next) => {
    if(!clinic)
    return  res.status(404).json({success: false, data: "Clinic not found"});
    
-   const services = [];
-   req.body.services.forEach((service)=>{
-     services.push({name: service.name, price: service.price})
-   })
+  //  const services = [];
+  //  req.body.services.forEach((service)=>{
+  //    services.push({name: service.name, price: service.price})
+  //  })
  
    //services.push({name: req.body.services[0].name, price: req.body.services[0].price});
    //console.log(services);
@@ -82,7 +82,7 @@ exports.updateClinicServices = async(req, res, next) => {
           phone: req.body.phone,
           email: req.body.email,
           description: req.body.description,
-          services
+          services: req.body.services,
          // services: [{name: req.body.services[0].name, price: req.body.services[0].price}]
 
         },
