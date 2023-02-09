@@ -138,6 +138,6 @@ router.route("/").all(authorize('admin'))
 
 router.route("/:id")
     .get(idValidation, validator, authorize('admin'), controller.getPatientByID)
-    .delete("/:id", authorize('admin'), idValidation, validator, controller.deletePatient);
+    .delete(authorize('admin'), idValidation, validator, controller.deletePatient);
 
 module.exports = router;
