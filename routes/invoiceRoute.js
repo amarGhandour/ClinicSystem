@@ -61,6 +61,59 @@ const {authorize} = require("../middlewares/authMW");
  *             application/json
  */
 
+  /**
+     * @swagger
+     * tags:
+     *   name: Invoices
+     *   description: API to Manage Invoices
+     */
+
+    /**
+     * @swagger
+     *   /invoices:
+     *     get:
+     *       summary: Get all invoices
+     *       tags: [Invoices]
+     *       responses:
+     *         "200":
+     *           description: The list of invoices
+     *           contents:
+     *             application/json:
+     *               schema:
+     *                 $ref: '#/components/schemas/Invoice'
+     *         "400":
+     *           $ref: '#/components/responses/400'
+     *         "401":
+     *           $ref: '#/components/responses/401'
+     */
+
+
+   /**
+     * @swagger
+     *   /invoices:
+     *     post:
+     *       summary: Create a invoices
+     *       tags: [Invoices]
+     *       requestBody:
+     *         required: true
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Invoice'
+     *       responses:
+     *         "400":
+     *           $ref: '#/components/responses/400'
+     *         "401":
+     *           $ref: '#/components/responses/401'
+     *         "200":
+     *           $ref: '#/components/responses/200'
+     *         "201":
+     *           description: Invoice created successfully
+     *           contents:
+     *             application/json
+     */
+
+
 
 /**
  * @swagger

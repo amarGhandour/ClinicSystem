@@ -27,6 +27,7 @@ router
   );
 
 router
+<<<<<<< HEAD
   .get(
     "/doctor/:doctorId",
     authorize("admin", "doctor"),
@@ -40,6 +41,10 @@ router
     validator,
     controller.getAllPrescriptionsForPatient
   );
+=======
+    .get("/doctor/:doctorId", authorize('admin', 'doctor'), idValidation, validator, controller.getAllPrescriptionsForDoctor)
+    .get("/patient/:patientId", idValidation, validator, controller.getAllPrescriptionsForPatient)
+>>>>>>> e850c2a37c92c1ef155d72964e1c2a9b50a2aa1e
 
 router.patch(
   "/:id/addDrug",
