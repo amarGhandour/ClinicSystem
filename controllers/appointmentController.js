@@ -136,6 +136,9 @@ exports.addAppointment = async (request, response, next) => {
         })
         newAppointment.save()
             .then((newApp) => {
+
+
+                
                 const io = getIo();
                 io.emit('appointment', newApp);
                 response.status(201).json({
