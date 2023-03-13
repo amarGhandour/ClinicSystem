@@ -13,8 +13,8 @@ router.route("/")
     .patch(authorize('admin', 'doctor'), prescriptionValidationForPatch, validator, controller.updatePrescription);
 
 router
-    .get("/doctor/:doctorId", authorize('admin', 'doctor'), idValidation, validator, controller.getAllPrescriptionsForDoctor)
-    .get("/patient/:patientId", idValidation, validator, controller.getAllPrescriptionsForPatient)
+    .get("/doctor/:id", authorize('admin', 'doctor'), idValidation, validator, controller.getAllPrescriptionsForDoctor)
+    .get("/patient/:id", idValidation, validator, controller.getAllPrescriptionsForPatient)
 
 router.patch("/:id/addDrug", authorize('admin', 'doctor'), idValidation, prescriptionValidationForPatch, validator, controller.addDrugToPrescription);
 router.patch("/:id/removeDrug", authorize('admin', 'doctor'), idValidation, prescriptionValidationForPatch, validator, controller.removeDrugFromPrescription)

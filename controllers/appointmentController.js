@@ -137,14 +137,21 @@ exports.addAppointment = async (request, response, next) => {
         newAppointment.save()
             .then((newApp) => {
 
-
-                
+                PatientSchema.findById()
                 const io = getIo();
+                io.emit("appointment", patient, newApp);
+                response.status(201).json({
+                  success: true,
+                  data: newApp,
+                })
+                
+        /*        const io = getIo();
                 io.emit('appointment', newApp);
                 response.status(201).json({
                     success: true,
                     data: newApp
                 });
+                */
             }).catch();
 
     } catch (e) {
