@@ -57,6 +57,9 @@ const schema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  averageRating:{
+    type:Number
+  }
 });
 
 schema.plugin(AutoIncrement, { id: "doctors_id_counter", inc_field: "_id" });

@@ -43,10 +43,10 @@ exports.getAllPrescriptions = (request, response, next) => {
 
 exports.getAllPrescriptionsForDoctor = async (request, response, next) => {
     try {
-        let doctor = await DoctorSchema.findOne({_id: request.params.doctorId})
+        let doctor = await DoctorSchema.findOne({_id: request.params.id})
         if (!doctor) return next(new ErrorResponse("doctor not found", 422))
 
-        let prescription = await PrescriptionSchema.find({doctorId: request.params.doctorId})
+        let prescription = await PrescriptionSchema.find({doctorId: request.params.id})
 
         response.status(200).json({success: true, data: prescription})
     } catch (error) {
@@ -55,10 +55,10 @@ exports.getAllPrescriptionsForDoctor = async (request, response, next) => {
 }
 exports.getAllPrescriptionsForPatient = async (request, response, next) => {
     try {
-        let patient = await PatientSchema.findOne({_id: request.params.patientId})
+        let patient = await PatientSchema.findOne({_id: request.params.id})
         if (!patient) return next(new ErrorResponse("patient not found", 422))
 
-        let prescription = await PrescriptionSchema.find({patientId: request.params.patientId})
+        let prescription = await PrescriptionSchema.find({patientId: request.params.id})
         response.status(201).json({success: true, data: prescription})
 
     } catch (error) {

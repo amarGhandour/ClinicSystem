@@ -6,6 +6,9 @@
   <body>
 
     <h1>NoTifications For Doctor</h1>
+    <h2 id="patient"></h2>
+    <h2 id="clinic"></h2>
+   <h2 id="date"></h2>
     <!--<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>-->
     <script
     src="https://cdn.socket.io/4.5.4/socket.io.min.js"
@@ -15,11 +18,14 @@
 </script>
     <script>
       // listen for connection 
-      let socket = io("http://localhost:3000");
+      let socket = io("http://localhost:8080");
       socket.on("connect", () => {
         console.log("Connected to server");
-        socket.on("appointment", (newapp)=>{
-            console.log(newapp);
+        socket.on("appointment", (patient,newapp)=>{
+            console.log(patient,newapp);
+            document.getElementById("patient").innerHTML = "Patient Name: "+ patient.name;
+             document.getElementById("clinic").innerHTML = "Clinic: "+ newapp.clinic;
+             document.getElementById("date").innerHTML = "Appointment Date: "+ newapp.day;
         })
 
       });

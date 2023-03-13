@@ -45,7 +45,7 @@ let port = process.env.PORT || 8080;
 const io = init(app);
 connectDB()
     .then((res) => {
-        server.listen(port, () => {
+        app.listen(port, () => {
             console.log("I am listening........", port);
     });
   })

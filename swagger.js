@@ -137,70 +137,117 @@ const options = {
                     },
                     example: {
 
-
-                        "patientId": 9,
-                        "doctorId": 34,
-                        "services": [
-                            {
-                                "name": "service1",
-                                "price": 100
-                            },
-                            {
-                                "name": "service2",
-                                "price": 200
-                            }
-                        ],
-                        "clinic": 20
+                       
+                    "patientId": 9,
+                    "doctorId": 34,
+                    "services": [
+                    {
+                        "name": "service1",
+                        "price": 100
+                    },
+                    {
+                        "name": "service2",
+                        "price": 200
                     }
+                ],
+                    "clinic": 20
+                }
+            
+            }
+            ,
+            Patient: {
+                type: 'object',
+                required: ['name', 'email', 'password','age'],
+                properties: {
+                    id:{
+                        type: 'integer',
+                        description: 'The ID of The Patient'
+                    },
+                    name: {
+                        type: 'string',
+                        description: 'The Name of The Patient'
+                    },
+                    email: {
+                        type: 'string',
+                        description: 'The Email of The Patient'
+                    },
+
+                    password: {
+                        type: 'string',
+                        description: "Password for the patient Account"
+                    }
+                    ,
+                    age: {
+                        type: 'integer',
+                        description: 'The Patient Age'
+                    }
+                    ,
+                    createdAt: {
+                        type: 'date',
+                        description: 'Calculated in Run Time'
+                    }
+                },
+                example: {
+
+
+                        "name" : "Mohamed",
+                        "email" : "MohamedWarda@gmail.com",
+                        "password" : "1234567",
+                        "age" : 25,
+
 
                 }
 
+            }
+
+
+        },
+        responses : {
+            400: {
+                description: 'Missing Tokken key - include it in the Authorization header',
+                contents: 'application/json'
             },
-            responses: {
-                400: {
-                    description: 'Missing Tokken key - include it in the Authorization header',
-                    contents: 'application/json'
-                },
-                401: {
-                    description: 'Unauthorized - incorrect Tokken key or incorrect format',
-                    contents: 'application/json'
-                },
-                404: {
-                    description: 'Not found',
-                    contents: 'application/json'
-                }
-                ,
-                500: {
-                    description: 'Internal Server Error',
-                    contents: 'application/json'
-                }
-                ,
-                422: {
-                    description: 'Validation Error',
-                    contents: 'application/json'
-                }
-                ,
-                200: {
-                    description: 'success',
-                    contents: 'application/json'
-                }
+            401: {
+                description: 'Unauthorized - incorrect Tokken key or incorrect format',
+                contents: 'application/json'
             },
-            securitySchemes: {
-                ApiKeyAuth: {
-                    type: 'apiKey',
-                    in: 'header',
-                    name: 'Authorization'
-                }
+            404: {
+                description: 'Not found',
+                contents: 'application/json'
+            }
+            ,
+            500: {
+                description: 'Internal Server Error',
+                contents: 'application/json'
+            }
+            ,
+            422: {
+                description: 'Validation Error',
+                contents: 'application/json'
+            }
+            ,
+            200: {
+                description: 'success',
+                contents: 'application/json'
             }
         },
-        security: [{
-            ApiKeyAuth: []
-        }]
+        securitySchemes: {
+            ApiKeyAuth: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'Authorization'
+            }
+          }
+      },
+      security: [{
+        ApiKeyAuth: []
+      }]
 
     },
     apis: ["./routes/reviewsRoute.js",
-        "./routes/appointmentRoute.js",
-        "./routes/invoiceRoute.js"],
+    "./routes/appointmentRoute.js",
+    "./routes/invoiceRoute.js",
+    "./routes/patientsRoute.js"],
 }
 
 module.exports = options
